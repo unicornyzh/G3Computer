@@ -65,7 +65,7 @@ public class RegisterGUI extends JPanel {
     
     private void setupIndex() {
         // Register index (for GPR and IX)
-        lightPanel.add(new JLabel(Integer.toString(this.index)));
+        this.lightPanel.add(new JLabel(Integer.toString(this.index)));
     }
     
     private void setupValues() {
@@ -73,20 +73,22 @@ public class RegisterGUI extends JPanel {
         this.radioButtons = new JRadioButton[this.register.getLength()];
         for (int i = 0; i < this.radioButtons.length; ++i) {
             this.radioButtons[i] = new JRadioButton();
-            lightPanel.add(this.radioButtons[i]);
+            this.lightPanel.add(this.radioButtons[i]);
         }
-        // Should add a listener
+
         JButton button = new JButton("Set");
-        lightPanel.add(button);
+        this.lightPanel.add(button);
         button.addActionListener((ActionEvent ae) -> {
             int value = 0;
             for (int i = 0; i < radioButtons.length; ++i)
                 if (radioButtons[i].isSelected())
                     value |= 1 << radioButtons.length - i - 1;
-            register.setContentByGUI(value);
+            // Prohibit response for efficiency (otherwise the setRadioButtons method would be called again, which is unnecessary).
+            register.setContent(value, true);
         });
-        // Add to the parent panel
-        this.add(lightPanel);
+        
+        // All set. Add to the parent panel.
+        this.add(this.lightPanel);
     }
     
     public void setRadioButtons(int value) {

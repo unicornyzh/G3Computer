@@ -3,14 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/G:/LZT/Computer%20System%20Architecture/Project/G3Computer/src/computer/CPU.java</file>
             <file>file:/G:/LZT/Computer%20System%20Architecture/Project/G3Computer/src/computer/Register.java</file>
             <file>file:/G:/LZT/Computer%20System%20Architecture/Project/G3Computer/src/gui/RegisterGUI.java</file>
+            <file>file:/G:/LZT/Computer%20System%20Architecture/Project/G3Computer/src/gui/ControlPanel.java</file>
             <file>file:/G:/LZT/Computer%20System%20Architecture/Project/G3Computer/src/computer/G3Computer.java</file>
-            <file>file:/G:/LZT/Computer%20System%20Architecture/Project/G3Computer/src/computer/ProcessorRegisters.java</file>
             <file>file:/G:/LZT/Computer%20System%20Architecture/Project/G3Computer/src/gui/RegisterPanel.java</file>
-            <file>file:/G:/LZT/Computer%20System%20Architecture/Project/G3Computer/src/computer/CU.java</file>
-            <file>file:/G:/LZT/Computer%20System%20Architecture/Project/G3Computer/src/computer/RomLoader.java</file>
             <file>file:/G:/LZT/Computer%20System%20Architecture/Project/G3Computer/src/computer/ISA.java</file>
         </group>
     </open-files>

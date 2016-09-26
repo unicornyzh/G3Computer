@@ -34,7 +34,7 @@ public class Register {
         this.respondToGUI();
     }
     
-    public void setContentByGUI(int content) {
+    public void setContent(int content, boolean prohibitResponse) {
         this.content = content;
     }
     
