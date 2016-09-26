@@ -35,8 +35,10 @@ public class UI extends JFrame {
         this.controlPanel = new ControlPanel(this.computer);
         this.getContentPane().add(BorderLayout.SOUTH, this.controlPanel);
         
+        // If it's not set the frame would just be hidden and the Java virtual machine (VM) will not terminate.
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setVisible(true);
-    }
+    }  
 }
 
 

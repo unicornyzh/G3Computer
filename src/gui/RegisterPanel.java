@@ -52,22 +52,27 @@ public class RegisterPanel extends JPanel {
         this.gprGUI = new RegisterGUI[4];
         for (int i = 0; i < 4; ++i) {
             if (i == 0) 
-                this.gprGUI[i] = new RegisterGUI("GPR", this.computer.cpu.registers.gpr[i], i, true);
+                // With name and index
+                this.gprGUI[i] = new RegisterGUI(this.computer.cpu.registers.gpr[i], "GPR", i);
             else
-                this.gprGUI[i] = new RegisterGUI("GPR", this.computer.cpu.registers.gpr[i], i, false);
+                // With only index
+                this.gprGUI[i] = new RegisterGUI(this.computer.cpu.registers.gpr[i], i);
             this.leftPanel.add(this.gprGUI[i]);
         }
         this.xGUI = new RegisterGUI[4];
         for (int i = 1; i < 4; ++i) {
             if (i == 1) 
-                this.xGUI[i] = new RegisterGUI("IX", this.computer.cpu.registers.x[i], i, true);
+                // With name and index
+                this.xGUI[i] = new RegisterGUI(this.computer.cpu.registers.x[i], "IX", i);
             else
-                this.xGUI[i] = new RegisterGUI("IX", this.computer.cpu.registers.x[i], i, false);
+                // With only index
+                this.xGUI[i] = new RegisterGUI(this.computer.cpu.registers.x[i], i);
             this.leftPanel.add(this.xGUI[i]);
         }
-        this.rightPanel.add(this.marGUI = new RegisterGUI("MAR", this.computer.cpu.registers.mar, -1, true));
-        this.rightPanel.add(this.mbrGUI = new RegisterGUI("MBR", this.computer.cpu.registers.mbr, -1, true));
-        this.rightPanel.add(this.irGUI = new RegisterGUI("IR", this.computer.cpu.registers.ir, -1, true));
-        this.rightPanel.add(this.pcGUI = new RegisterGUI("PC", this.computer.cpu.registers.pc, -1, true));
+        // With only name
+        this.rightPanel.add(this.marGUI = new RegisterGUI(this.computer.cpu.registers.mar, "MAR"));
+        this.rightPanel.add(this.mbrGUI = new RegisterGUI(this.computer.cpu.registers.mbr, "MBR"));
+        this.rightPanel.add(this.irGUI = new RegisterGUI(this.computer.cpu.registers.ir, "IR"));
+        this.rightPanel.add(this.pcGUI = new RegisterGUI(this.computer.cpu.registers.pc, "PC"));
     }
 }

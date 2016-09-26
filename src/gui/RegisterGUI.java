@@ -17,23 +17,37 @@ import java.awt.event.ActionEvent;
 public class RegisterGUI extends JPanel {
     private final String name;
     private final int index;
-    private final boolean showName;
     private final Register register;
     private JRadioButton[] radioButtons;
     private JPanel lightPanel;
     
-    public RegisterGUI(String name, Register register, int index, boolean showName) {
+    public RegisterGUI(Register register, String name) {
+        super();
+        this.name = name;
+        this.register = register;
+        this.index = -1;
+        this.initComponents();
+    }
+    
+    public RegisterGUI(Register register, int index) {
+        super();
+        this.name = null;
+        this.register = register;
+        this.index = index;
+        this.initComponents();
+    }
+    
+    public RegisterGUI(Register register, String name, int index) {
         super();
         this.name = name;
         this.register = register;
         this.index = index;
-        this.showName = showName;
         this.initComponents();
     }
     
     private void initComponents() {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        if (this.showName)
+        if (this.name != null)
             this.setupName();
         // Pack the values and buttons together into a panel
         this.lightPanel = new JPanel();

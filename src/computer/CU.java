@@ -78,24 +78,7 @@ public class CU implements DataHandlingOperations {
     }
     
     public Register execute(ISA instruction) throws Exception {
-        switch (instruction.getOperation()) {
-            case "LDR":
-                return this.LDR(instruction);
-            case "STR":
-                return this.STR(instruction);
-            case "AMR":
-                return this.alu.AMR(instruction);
-            case "SMR":
-                return this.alu.SMR(instruction);
-            case "AIR":
-                return this.alu.AIR(instruction);
-            case "SIR":
-                return this.alu.SIR(instruction);
-            // Error
-            default:
-                // Better customize the exception (later work)
-                throw new Exception();
-        }
+        return instruction.operate(this, this.alu);
     }
     
     public void store(Register target) {

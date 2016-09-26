@@ -5,11 +5,28 @@
  */
 package computer;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  *
  * @author Administrator
  */
 public class ISA {
+    private static Map<Integer, String> OPCODE_MAP = initOperation();
+    
+    private static Map initOperation() {
+        Map<Integer, String> operation = new HashMap<>();
+        // Key is Octal integer
+        operation.put(01, "LDR");
+        operation.put(02, "STR");
+        operation.put(04, "AMR");
+        operation.put(05, "SMR");
+        operation.put(06, "AIR");
+        operation.put(07, "SIR");
+        return operation;
+    }
+    
     // Components of the intruction
     private final int opcode;
     private final int r;
@@ -26,24 +43,31 @@ public class ISA {
         this.address = instruction & 0x0000001f;
     }
     
-    public String getOperation () {
-        // Judge in Octal
-        switch (this.opcode) {
-            case 01:
-                return "LDR";
-            case 02:
-                return "STR";
-            case 04:
-                return "AMR";
-            case 05:
-                return "SMR";
-            case 06:
-                return "AIR";
-            case 07:
-                return "SIR";
-            default:
-                return "Error";
+    // Execute
+    public Register operate (DataHandlingOperations dho, ArithmeticLogicOperations alo) throws Exception {
+        if (OPCODE_MAP.containsKey(this.opcode)) {
+            switch (OPCODE_MAP.get(this.opcode)) {
+                case "LDR":
+                    return dho.LDR(this);
+                case "STR":
+                    return dho.STR(this);
+                case "AMR":
+                    return alo.AMR(this);
+                case "SMR":
+                    return alo.SMR(this);
+                case "AIR":
+                    return alo.AIR(this);
+                case "SIR":
+                    return alo.SIR(this);
+                // Found but no branch to execute. Hardly needs considering though.
+                default:
+                    throw new Exception();
+            }
         }
+        // Unexpected instruction
+        else
+            // Better customize the exception (later work)
+            throw new Exception();
     }
     
     public int getR() {
