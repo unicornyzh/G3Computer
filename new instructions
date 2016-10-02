@@ -1,0 +1,4 @@
+    new instructions
+    026 CMT rx,ry  compare rx and ry,return the bigger one to rx.
+    027 CMB rx,ry  compare rx and ry,return the smaller one to ry.
+  
