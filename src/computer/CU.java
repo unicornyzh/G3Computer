@@ -78,7 +78,7 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
     }
     
     public Register execute(ISA instruction) throws Exception {
-        return instruction.operate(this, this.alu);
+        return instruction.operate(this, this.alu, this);
     }
     
     public void store(Register target) {

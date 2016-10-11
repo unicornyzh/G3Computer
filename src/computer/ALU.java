@@ -170,4 +170,24 @@ public class ALU implements ArithmeticLogicOperations {
         this.registers.irr.setContent(res);
         return this.registers.gpr[instruction.getR()];
     }
+
+    @Override
+    public Register CMT(ISA instruction) {
+        int rx = instruction.getR();
+        int ry = instruction.getIX();
+        int x = this.registers.gpr[rx].getContent();
+        int y = this.registers.gpr[ry].getContent();
+        this.registers.irr.setContent(Math.max(x, y));
+        return this.registers.gpr[rx];
+    }
+
+    @Override
+    public Register CMB(ISA instruction) {
+        int rx = instruction.getR();
+        int ry = instruction.getIX();
+        int x = this.registers.gpr[rx].getContent();
+        int y = this.registers.gpr[ry].getContent();
+        this.registers.irr.setContent(Math.min(x, y));
+        return this.registers.gpr[ry];
+    }
 }

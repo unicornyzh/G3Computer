@@ -22,4 +22,22 @@ public interface ArithmeticLogicOperations {
     public Register NOT(ISA instruction);
     public Register SRC(ISA instruction);
     public Register RRC(ISA instruction);
+
+    /**
+     * Customized Operation.
+     * Opcode 026.
+     * CMB rx, ry: Compare c(rx) and c(ry), then return the bigger one to c(rx).
+     * @param instruction
+     * @return GPR[rx]
+     */
+    public Register CMT(ISA instruction);
+
+    /**
+     * Customized Operation.
+     * Opcode 027.
+     * CMB rx, ry: Compare c(rx) and c(ry), then return the smaller one to c(ry).
+     * @param instruction
+     * @return GPR[ry]
+     */
+    public Register CMB(ISA instruction);
 }
