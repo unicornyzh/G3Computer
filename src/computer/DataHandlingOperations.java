@@ -12,4 +12,7 @@ package computer;
 public interface DataHandlingOperations {
     public Register LDR(ISA instruction);
     public Register STR(ISA instruction);
+    public Register LDA(ISA instruction);
+    public Register LDX(ISA instruction);
+    public Register STX(ISA instruction);
 }

@@ -14,4 +14,12 @@ public interface ArithmeticLogicOperations {
     public Register SMR(ISA instruction);
     public Register AIR(ISA instruction);
     public Register SIR(ISA instruction);
+    public Register MLT(ISA instruction);
+    public Register DVD(ISA instruction);
+    public Register TRR(ISA instruction);
+    public Register AND(ISA instruction);
+    public Register ORR(ISA instruction);
+    public Register NOT(ISA instruction);
+    public Register SRC(ISA instruction);
+    public Register RRC(ISA instruction);
 }
