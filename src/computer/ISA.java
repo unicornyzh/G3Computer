@@ -5,9 +5,6 @@
  */
 package computer;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  *
  * @author Administrator
@@ -30,12 +27,19 @@ public class ISA {
     }
     
     // Execute
-    public Register operate (DataHandlingOperations dho, ArithmeticLogicOperations alo) throws Exception {
+    public Register operate (DataHandlingOperations dho, ArithmeticLogicOperations alo, ControlFlowOperations cfo) throws Exception {
         switch (this.opcode) {
             case 01:
                 return dho.LDR(this);
             case 02:
                 return dho.STR(this);
+            case 03:
+                return dho.LDA(this);
+            case 041:
+                return dho.LDX(this);
+            case 042:
+                return dho.STX(this);
+                
             case 04:
                 return alo.AMR(this);
             case 05:
@@ -44,6 +48,43 @@ public class ISA {
                 return alo.AIR(this);
             case 07:
                 return alo.SIR(this);
+            case 020:
+                return alo.MLT(this);
+            case 021:
+                return alo.DVD(this);
+            case 022:
+                return alo.TRR(this);
+            case 023:
+                return alo.AND(this);
+            case 024:
+                return alo.ORR(this);
+            case 025:
+                return alo.NOT(this);
+            case 026:
+                return alo.CMT(this);
+            case 027:
+                return alo.CMB(this);
+            case 031:
+                return alo.SRC(this);
+            case 032:
+                return alo.RRC(this);
+                
+            case 010:
+                return cfo.JZ(this);
+            case 011:
+                return cfo.JNE(this);
+            case 012:
+                return cfo.JCC(this);
+            case 013:
+                return cfo.JMA(this);
+            case 014:
+                return cfo.JSR(this);
+            case 015:
+                return cfo.RFS(this);
+            case 016:
+                return cfo.SOB(this);
+            case 017:
+                return cfo.JGE(this);
             // Unexpected instruction occurred.
             default:
                 // Better customize this exception (later work).

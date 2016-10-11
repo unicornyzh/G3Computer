@@ -15,6 +15,8 @@ public class ProcessorRegisters {
     private UI ui;
     
     public Register pc;
+    // cc(0), cc(1), cc(2), cc(3): overflow, underflow, division by zero, equal-or-not.
+    public Register cc;
     public Register ir;
     public Register iar;
     public Register irr;
@@ -27,6 +29,7 @@ public class ProcessorRegisters {
     
     public ProcessorRegisters() {
         this.pc = new Register(12);
+        this.cc = new Register(4);
         this.ir = new Register(16);
         this.iar = new Register(16);
         this.irr = new Register(16);
@@ -43,6 +46,7 @@ public class ProcessorRegisters {
     public void setUI(UI ui) {
         this.ui = ui;
         this.pc.setRegisterGUI(this.ui.registerPanel.pcGUI);
+        this.cc.setRegisterGUI(this.ui.registerPanel.ccGUI);
         this.ir.setRegisterGUI(this.ui.registerPanel.irGUI);
         this.mar.setRegisterGUI(this.ui.registerPanel.marGUI);
         this.mbr.setRegisterGUI(this.ui.registerPanel.mbrGUI);

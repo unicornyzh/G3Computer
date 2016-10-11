@@ -9,7 +9,7 @@ package computer;
  *
  * @author Administrator
  */
-public class CU implements DataHandlingOperations {
+public class CU implements DataHandlingOperations, ControlFlowOperations {
     private final Memory memory;
     private final ProcessorRegisters registers;
     private final ALU alu;
@@ -78,7 +78,7 @@ public class CU implements DataHandlingOperations {
     }
     
     public Register execute(ISA instruction) throws Exception {
-        return instruction.operate(this, this.alu);
+        return instruction.operate(this, this.alu, this);
     }
     
     public void store(Register target) {
@@ -95,7 +95,7 @@ public class CU implements DataHandlingOperations {
     }
     
     public void nextInstruction() {
-        // Increment by 1 (no brach is considered for now)
+        // Increment by 1 (Branch has been implemented in previous steps by changing PC).
         this.registers.pc.setContent(this.registers.pc.getContent() + 1);
     }
 
@@ -103,6 +103,7 @@ public class CU implements DataHandlingOperations {
     public Register LDR(ISA instruction) {
         // IRR = MBR
         this.registers.irr.setContent(this.registers.mbr.getContent());
+        // GPR[r]
         return this.registers.gpr[instruction.getR()];
     }
 
@@ -112,5 +113,116 @@ public class CU implements DataHandlingOperations {
         this.registers.irr.setContent(this.registers.gpr[instruction.getR()].getContent());
         // Means the result will be stored into memory
         return null;
+    }
+
+    @Override
+    public Register LDA(ISA instruction) {
+        // IRR = MAR
+        this.registers.irr.setContent(this.registers.mar.getContent());
+        // GPR[r]
+        return this.registers.gpr[instruction.getR()];
+    }
+
+    @Override
+    public Register LDX(ISA instruction) {
+        // IRR = MBR
+        this.registers.irr.setContent(this.registers.mbr.getContent());
+        // X[ix]
+        // ix can't be 0 here. Confirmation is needed (later).
+        return this.registers.x[instruction.getIX()];
+    }
+
+    @Override
+    public Register STX(ISA instruction) {
+        // IRR = X[ix]
+        this.registers.irr.setContent(this.registers.x[instruction.getIX()].getContent());
+        // Means the result will be stored into memory
+        return null;
+    }
+
+    @Override
+    public Register JZ(ISA instruction) {
+        // IRR = MAR - 1 if GPR[r] == 0 else PC
+        if (this.registers.gpr[instruction.getR()].getContent() == 0)
+            this.registers.irr.setContent(this.registers.mar.getContent() - 1);
+        else
+            this.registers.irr.setContent(this.registers.pc.getContent());
+        // PC
+        return this.registers.pc;
+    }
+
+    @Override
+    public Register JNE(ISA instruction) {
+        // IRR = MAR - 1 if GPR[r] != 0 else PC
+        if (this.registers.gpr[instruction.getR()].getContent() != 0)
+            this.registers.irr.setContent(this.registers.mar.getContent() - 1);
+        else
+            this.registers.irr.setContent(this.registers.pc.getContent());
+        // PC
+        return this.registers.pc;
+    }
+
+    @Override
+    public Register JCC(ISA instruction) {
+        int cc = instruction.getR();
+        // IRR = MAR - 1 if If cc bit == 1 else PC
+        if ((this.registers.cc.getContent() >> cc & 1) == 1)
+            this.registers.irr.setContent(this.registers.mar.getContent() - 1);
+        else
+            this.registers.irr.setContent(this.registers.pc.getContent());
+        // PC
+        return this.registers.pc;
+    }
+
+    @Override
+    public Register JMA(ISA instruction) {
+        // IRR = MAR - 1
+        this.registers.irr.setContent(this.registers.mar.getContent() - 1);
+        // PC
+        return this.registers.pc;
+    }
+
+    @Override
+    public Register JSR(ISA instruction) {
+        // GPR[3] = PC + 1
+        this.registers.gpr[3].setContent(this.registers.pc.getContent() + 1);
+        // IRR = MAR - 1
+        this.registers.irr.setContent(this.registers.mar.getContent() - 1);
+        // PC
+        return this.registers.pc;
+    }
+
+    @Override
+    public Register RFS(ISA instruction) {
+        // GPR[0] = Immed
+        this.registers.gpr[0].setContent(instruction.getAddress());
+        // IRR = GPR[3] - 1
+        this.registers.irr.setContent(this.registers.gpr[3].getContent() - 1);
+        // PC
+        return this.registers.pc;
+    }
+
+    @Override
+    public Register SOB(ISA instruction) {
+        // GPR[r] = GPR[r] - 1
+        this.registers.gpr[instruction.getR()].setContent(this.registers.gpr[instruction.getR()].getContent() - 1);
+        // IRR = MAR - 1 if If GPR[r] > 0 else PC
+        if (this.registers.gpr[instruction.getR()].getContent() > 0)
+            this.registers.irr.setContent(this.registers.mar.getContent() - 1);
+        else
+            this.registers.irr.setContent(this.registers.pc.getContent());
+        // PC
+        return this.registers.pc;
+    }
+
+    @Override
+    public Register JGE(ISA instruction) {
+        // IRR = MAR - 1 if If GPR[r] >= 0 else PC
+        if (this.registers.gpr[instruction.getR()].getContent() >= 0)
+            this.registers.irr.setContent(this.registers.mar.getContent() - 1);
+        else
+            this.registers.irr.setContent(this.registers.pc.getContent());
+        // PC
+        return this.registers.pc;
     }
 }
