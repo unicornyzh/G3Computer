@@ -39,6 +39,8 @@ public class ISA {
                 return dho.LDX(this);
             case 042:
                 return dho.STX(this);
+            case 043:
+                return dho.LIX(this);
                 
             case 04:
                 return alo.AMR(this);

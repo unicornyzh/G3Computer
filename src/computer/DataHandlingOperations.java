@@ -15,4 +15,13 @@ public interface DataHandlingOperations {
     public Register LDA(ISA instruction);
     public Register LDX(ISA instruction);
     public Register STX(ISA instruction);
+
+    /**
+     * Customized Operation.
+     * Opcode 043.
+     * LIX x, immed: Assign X with an immediate value.
+     * @param instruction
+     * @return X[ix]
+     */
+    public Register LIX(ISA instruction);
 }
