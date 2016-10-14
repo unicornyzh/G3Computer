@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 public class UI extends JFrame {
     private final Computer computer;
     
+    public IOPanel ioPanel;
     public RegisterPanel registerPanel;
     public ControlPanel controlPanel;
     
@@ -28,6 +29,9 @@ public class UI extends JFrame {
     private void initComponents() {
         this.setSize(1200, 800);
         this.setLocationRelativeTo(null);
+        
+        this.ioPanel = new IOPanel(this.computer);
+        this.getContentPane().add(BorderLayout.NORTH, this.ioPanel);
         
         this.registerPanel = new RegisterPanel(this.computer);
         this.getContentPane().add(BorderLayout.CENTER, this.registerPanel);

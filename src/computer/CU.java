@@ -225,4 +225,13 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
         // PC
         return this.registers.pc;
     }
+
+    @Override
+    public Register LIX(ISA instruction) {
+        // IRR = Immed
+        this.registers.irr.setContent(instruction.getAddress());
+        // X[ix]
+        // ix can't be 0 here. Confirmation is needed (later).
+        return this.registers.x[instruction.getIX()];
+    }
 }
