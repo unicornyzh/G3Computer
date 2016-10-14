@@ -188,6 +188,6 @@ public class ALU implements ArithmeticLogicOperations {
         int x = this.registers.gpr[rx].getContent();
         int y = this.registers.gpr[ry].getContent();
         this.registers.irr.setContent(Math.min(x, y));
-        return this.registers.gpr[ry];
+        return this.registers.gpr[rx];
     }
 }
