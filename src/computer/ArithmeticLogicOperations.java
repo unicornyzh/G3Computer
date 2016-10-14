@@ -35,9 +35,9 @@ public interface ArithmeticLogicOperations {
     /**
      * Customized Operation.
      * Opcode 027.
-     * CMB rx, ry: Compare c(rx) and c(ry), then return the smaller one to c(ry).
+     * CMB rx, ry: Compare c(rx) and c(ry), then return the smaller one to c(rx).
      * @param instruction
-     * @return GPR[ry]
+     * @return GPR[rx]
      */
     public Register CMB(ISA instruction);
 }

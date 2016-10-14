@@ -42,7 +42,7 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
         // MAR = PC
         this.registers.mar.setContent(this.registers.pc.getContent());
         // MBR = Memory[MAR]
-        this.registers.mbr.setContent(this.memory.getByAddress(this.registers.mar.getContent()));
+        this.registers.mbr.setContent(this.memory.read(this.registers.mar.getContent()));
         // IR = MBR
         this.registers.ir.setContent(this.registers.mbr.getContent());
     }
@@ -65,16 +65,16 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
         else {
             if (instruction.getIX() == 0)
                 // IAR = Memory[Instruction.address]
-                this.registers.iar.setContent(memory.getByAddress(instruction.getAddress()));
+                this.registers.iar.setContent(memory.read(instruction.getAddress()));
             // Indexing
             else
                 // IAR = Memory[Instruction.address + X[ix]]
-                this.registers.iar.setContent(memory.getByAddress(this.registers.x[instruction.getIX()].getContent() + instruction.getAddress()));
+                this.registers.iar.setContent(memory.read(this.registers.x[instruction.getIX()].getContent() + instruction.getAddress()));
         }
         // MAR = IAR
         this.registers.mar.setContent(this.registers.iar.getContent());
         // MBR = Memory[MAR]
-        this.registers.mbr.setContent(this.memory.getByAddress(this.registers.mar.getContent()));
+        this.registers.mbr.setContent(this.memory.read(this.registers.mar.getContent()));
     }
     
     public Register execute(ISA instruction) throws Exception {
@@ -87,7 +87,7 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
             // MBR = IRR
             this.registers.mbr.setContent(this.registers.irr.getContent());
             // Memory[MAR] = MBR
-            this.memory.setByAddress(this.registers.mar.getContent(), this.registers.mbr.getContent());
+            this.memory.write(this.registers.mar.getContent(), this.registers.mbr.getContent());
         }
         else
             // Target register = IRR
