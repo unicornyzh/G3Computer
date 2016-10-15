@@ -262,7 +262,10 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
 
     @Override
     public Register OUT(ISA instruction) {
-        this.ui.ioPanel.outputTextField.setText(String.valueOf(this.registers.gpr[instruction.getR()].getContent()));
+        if (this.ui.ioPanel.outputTextArea.getText().equals(""))
+            this.ui.ioPanel.outputTextArea.append(String.valueOf(this.registers.gpr[instruction.getR()].getContent()));
+        else
+            this.ui.ioPanel.outputTextArea.append(System.lineSeparator() + String.valueOf(this.registers.gpr[instruction.getR()].getContent()));
         this.registers.irr.setContent(this.registers.gpr[instruction.getR()].getContent());
         return this.registers.gpr[instruction.getR()];
     }

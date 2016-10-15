@@ -12,6 +12,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 /**
@@ -21,7 +23,7 @@ import javax.swing.JTextField;
 public class IOPanel extends JPanel {
     private final Computer computer;
     
-    public JTextField outputTextField;
+    public JTextArea outputTextArea;
     public JTextField inputTextField;
     public JButton inputButton;
     
@@ -36,9 +38,10 @@ public class IOPanel extends JPanel {
         this.setLayout(ioBoxlayout);
         
         // Output
-        this.outputTextField = new JTextField();
-        outputTextField.setEditable(false);
-        this.add(outputTextField);
+        this.outputTextArea = new JTextArea();
+        outputTextArea.setEditable(false);
+        outputTextArea.setRows(5);
+        this.add(new JScrollPane(outputTextArea));
         
         // Input
         this.inputTextField = new JTextField();
