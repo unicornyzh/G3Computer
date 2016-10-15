@@ -5,35 +5,45 @@
  */
 package computer;
 
+import gui.UI;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Administrator
  */
 public class CU implements DataHandlingOperations, ControlFlowOperations {
+    private UI ui;
+    
     private final Memory memory;
     private final ProcessorRegisters registers;
     private final ALU alu;
+    
+    private boolean interrupted;
     
     public CU(Memory memory, ProcessorRegisters registers, ALU alu) {
         this.memory = memory;
         this.registers = registers;
         this.alu = alu;
+        this.interrupted = false;
     }
     
-    public void instuctionCycle() throws Exception {
+    public void setUI(UI ui) {
+        this.ui = ui;
+    }
+
+    public void instuctionCycle() throws InterruptException, Exception {
         this.fetchInstruction();
         ISA instruction = this.decode();
         this.fetchOperand(instruction);
-        Register target = null;
-        try {
-            target = this.execute(instruction);
-        } catch (Exception ex) {
-            // At this point PC is set to the first address of the boot program, which is currently the only program in memory.
-            // This step should actually hand over control back to CPU to be handled.
-            // Like CPU.reboot()
-            this.registers.pc.setContent(0);
-            throw ex;
-        }
+        Register target = this.execute(instruction);
+        this.store(target);
+        this.nextInstruction();
+    }
+    
+    // Interrupt should not be considered here cuz it's the process after that is done. Nor should other exceptions.
+    public void recover(ISA instruction) throws InterruptException, Exception {
+        Register target = this.execute(instruction);
         this.store(target);
         this.nextInstruction();
     }
@@ -77,7 +87,7 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
         this.registers.mbr.setContent(this.memory.read(this.registers.mar.getContent()));
     }
     
-    public Register execute(ISA instruction) throws Exception {
+    public Register execute(ISA instruction) throws InterruptException, Exception {
         return instruction.operate(this, this.alu, this);
     }
     
@@ -233,5 +243,27 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
         // X[ix]
         // ix can't be 0 here. Confirmation is needed (later).
         return this.registers.x[instruction.getIX()];
+    }
+
+    @Override
+    public Register IN(ISA instruction) throws InterruptException {
+        if (!this.interrupted) {
+            this.interrupted = true;
+            JOptionPane.showMessageDialog(this.ui, "Please input your data.");
+            throw new InterruptException(instruction);
+        }
+        else {
+            this.interrupted = false;
+            // At this point the input would be absolutely right (cuz it's been examined).
+            this.registers.irr.setContent(Integer.parseInt(this.ui.ioPanel.inputTextField.getText()));
+            return this.registers.gpr[instruction.getR()];
+        }
+    }
+
+    @Override
+    public Register OUT(ISA instruction) {
+        this.ui.ioPanel.outputTextField.setText(String.valueOf(this.registers.gpr[instruction.getR()].getContent()));
+        this.registers.irr.setContent(this.registers.gpr[instruction.getR()].getContent());
+        return this.registers.gpr[instruction.getR()];
     }
 }

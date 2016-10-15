@@ -15,24 +15,24 @@ import java.util.Queue;
  */
 public class Memory {
     private final int size;
-    private int[] memory;
+    private int[] mainMemory;
     private final Cache cache;
     
     public Memory(int size) {
         this.size = size;
-        this.memory = new int[size];
-        Arrays.fill(this.memory, 0);
+        this.mainMemory = new int[size];
+        Arrays.fill(this.mainMemory, 0);
         this.cache = new Cache(8, 16);
     }
     
     // Direct access
     public int directRead(int index) {
-        return memory[index];
+        return mainMemory[index];
     }
     
     // Direct access
     public void directWrite(int index, int content) {
-        this.memory[index] = content;
+        this.mainMemory[index] = content;
     }
     
     public int read(int address) {
@@ -64,8 +64,8 @@ class Cache {
     
     private CacheLine addLine(int address, Memory memory) {
         if (this.lines.size() >= this.cacheSize) {
-            this.lines.remove();
-            this.traceRemove(address);
+            CacheLine removed = this.lines.remove();
+            this.traceRemove(removed.getTag());
         }
         CacheLine newLine = new CacheLine(this.lineSize, address, memory);
         this.lines.add(newLine);
@@ -134,6 +134,10 @@ class CacheLine {
         int pos = address - tag;
         // Return the position where the datum should be in the line if a match is found, else -1.
         return pos >= 0 && pos < this.data.length;
+    }
+    
+    public int getTag() {
+        return this.tag;
     }
     
     public void setData(int address, int datum) {

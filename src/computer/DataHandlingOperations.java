@@ -24,4 +24,7 @@ public interface DataHandlingOperations {
      * @return X[ix]
      */
     public Register LIX(ISA instruction);
+    
+    public Register IN(ISA instruction) throws InterruptException;
+    public Register OUT(ISA instruction);
 }

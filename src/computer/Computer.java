@@ -22,11 +22,12 @@ public class Computer {
         this.memory = new Memory(2048);
         // Make CPU be able to access memory through MAR
         this.cpu = new CPU(16, this.memory);
-        this.romLoader = new RomLoader(this.memory);
+        this.romLoader = new RomLoader(this.memory, this.cpu);
     }
     
     public void setUI(UI ui) {
         this.ui = ui;
         this.cpu.setUI(this.ui);
+        this.romLoader.setUI(this.ui);
     }
 }

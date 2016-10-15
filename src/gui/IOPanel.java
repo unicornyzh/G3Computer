@@ -10,6 +10,7 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -19,6 +20,10 @@ import javax.swing.JTextField;
  */
 public class IOPanel extends JPanel {
     private final Computer computer;
+    
+    public JTextField outputTextField;
+    public JTextField inputTextField;
+    public JButton inputButton;
     
     public IOPanel(Computer computer) {
         super();
@@ -31,15 +36,29 @@ public class IOPanel extends JPanel {
         this.setLayout(ioBoxlayout);
         
         // Output
-        JTextField outputTextField = new JTextField();
+        this.outputTextField = new JTextField();
         outputTextField.setEditable(false);
         this.add(outputTextField);
         
         // Input
-        JTextField inputTextField = new JTextField();
-        JButton inputButton = new JButton("Input");
+        this.inputTextField = new JTextField();
+        this.inputButton = new JButton("Input");
         inputButton.addActionListener((ActionEvent ae) -> {
+            // Validate the timing.
+            if (!computer.cpu.isInterrupted()) {
+                JOptionPane.showMessageDialog(null, "Input denied: No input instruction executed.", "Input Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             
+            // Validate the input.
+            try {
+                Integer.parseInt(this.inputTextField.getText());
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Incorrect input.", "Input Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            computer.cpu.recover();
         });
         inputButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         this.add(inputTextField);
