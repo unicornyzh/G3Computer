@@ -45,6 +45,8 @@ public class ISA {
                 return dho.IN(this);
             case 062:
                 return dho.OUT(this);
+            case 063:
+                return dho.CHK(this);
                 
             case 04:
                 return alo.AMR(this);

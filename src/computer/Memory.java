@@ -5,9 +5,12 @@
  */
 package computer;
 
+import java.io.*;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Queue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -49,10 +52,15 @@ class Cache {
     private final int cacheSize;
     private final Queue<CacheLine> lines;
     
+    private final String filename;
+    
     public Cache(int lineSize, int cacheSize) {
         this.lineSize = lineSize;
         this.cacheSize = cacheSize;
         this.lines = new ArrayDeque<>();
+        
+        this.filename = "trace.txt";
+        this.traceToFile("Cache Log\n", false);
     }
     
     private CacheLine find(int address) {
@@ -103,19 +111,44 @@ class Cache {
     }
     
     private void traceMiss(int address) {
-        System.out.format("Cache miss for memory address %d.\n", address);
+        String msg = String.format("Cache miss for memory address %d.\n", address);
+        System.out.print(msg);
+        this.traceToFile(msg, true);
     }
     
     private void traceHit(int address) {
-        System.out.format("Cache hit for memory address %d.\n", address);
+        String msg = String.format("Cache hit for memory address %d.\n", address);
+        System.out.print(msg);
+        this.traceToFile(msg, true);
     }
     
     private void traceAdd(int address) {
-        System.out.format("Added a new cache line with tag %d. Current number of lines: %d.\n", address, this.lines.size());
+        String msg = String.format("Added a new cache line with tag %d. Current number of lines: %d.\n", address, this.lines.size());
+        System.out.print(msg);
+        this.traceToFile(msg, true);
     }
     
     private void traceRemove(int address) {
-        System.out.format("Removed a cache line with tag %d. Current number of lines: %d.\n", address, this.lines.size());
+        String msg = String.format("Removed a cache line with tag %d. Current number of lines: %d.\n", address, this.lines.size());
+        System.out.print(msg);
+        this.traceToFile(msg, true);
+    }
+    
+    private void traceToFile(String msg, boolean toAppend) {
+        Writer writer = null;
+        try {
+            writer = new BufferedWriter(new FileWriter(this.filename, toAppend));
+            writer.append(msg);
+        } catch (IOException ex) {
+            Logger.getLogger(Cache.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (writer != null)
+                    writer.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Cache.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 }
 

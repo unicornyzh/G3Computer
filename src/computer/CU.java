@@ -266,4 +266,10 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
         this.registers.irr.setContent(this.registers.gpr[instruction.getR()].getContent());
         return this.registers.gpr[instruction.getR()];
     }
+
+    @Override
+    public Register CHK(ISA instruction) {
+        this.registers.irr.setContent(1);
+        return this.registers.gpr[instruction.getR()];
+    }
 }

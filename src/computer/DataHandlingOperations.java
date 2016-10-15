@@ -27,4 +27,5 @@ public interface DataHandlingOperations {
     
     public Register IN(ISA instruction) throws InterruptException;
     public Register OUT(ISA instruction);
+    public Register CHK(ISA instruction);
 }
