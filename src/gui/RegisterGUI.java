@@ -76,6 +76,7 @@ public class RegisterGUI extends JPanel {
             this.lightPanel.add(this.radioButtons[i]);
         }
 
+        // Set button
         JButton button = new JButton("Set");
         this.lightPanel.add(button);
         button.addActionListener((ActionEvent ae) -> {
@@ -85,6 +86,8 @@ public class RegisterGUI extends JPanel {
                     value |= 1 << radioButtons.length - i - 1;
             // Prohibit response for efficiency (otherwise the setRadioButtons method would be called again, which is unnecessary).
             register.setContent(value, true);
+            
+            JOptionPane.showMessageDialog(null, "Value set.");
         });
         
         // All set. Add to the parent panel.
