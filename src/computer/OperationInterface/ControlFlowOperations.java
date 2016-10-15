@@ -3,7 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package computer;
+package computer.OperationInterface;
+
+import computer.ComputerExceptions.HaltException;
+import computer.ISA;
+import computer.Register;
+import computer.ComputerExceptions.UnexpectedInstructionException;
 
 /**
  *

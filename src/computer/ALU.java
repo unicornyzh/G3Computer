@@ -5,6 +5,8 @@
  */
 package computer;
 
+import computer.OperationInterface.ArithmeticLogicOperations;
+
 /**
  *
  * @author Administrator

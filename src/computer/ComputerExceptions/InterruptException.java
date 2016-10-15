@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package computer;
+package computer.ComputerExceptions;
 
+import computer.ISA;
 import javax.swing.JOptionPane;
 
 /**
@@ -26,9 +27,5 @@ public class InterruptException extends Exception {
     
     public ISA getInstruction() {
         return this.instruction;
-    }
-    
-    public void showAlert() {
-        JOptionPane.showMessageDialog(null, "Disabled by interrupt.", "CPU Error", JOptionPane.ERROR_MESSAGE);
     }
 }

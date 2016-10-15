@@ -5,6 +5,13 @@
  */
 package computer;
 
+import computer.ComputerExceptions.InterruptException;
+import computer.ComputerExceptions.UnexpectedInstructionException;
+import computer.ComputerExceptions.HaltException;
+import computer.OperationInterface.ControlFlowOperations;
+import computer.OperationInterface.ArithmeticLogicOperations;
+import computer.OperationInterface.DataHandlingOperations;
+
 /**
  *
  * @author Administrator

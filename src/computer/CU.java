@@ -5,6 +5,12 @@
  */
 package computer;
 
+import computer.ComputerExceptions.MemoryAddressException;
+import computer.ComputerExceptions.InterruptException;
+import computer.ComputerExceptions.UnexpectedInstructionException;
+import computer.ComputerExceptions.HaltException;
+import computer.OperationInterface.ControlFlowOperations;
+import computer.OperationInterface.DataHandlingOperations;
 import gui.UI;
 import javax.swing.JOptionPane;
 

@@ -5,6 +5,7 @@
  */
 package computer;
 
+import computer.ComputerExceptions.MemoryAddressException;
 import java.io.*;
 import java.util.ArrayDeque;
 import java.util.Arrays;

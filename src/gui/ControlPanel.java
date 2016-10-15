@@ -6,7 +6,7 @@
 package gui;
 
 import computer.Computer;
-import computer.MemoryAddressException;
+import computer.ComputerExceptions.MemoryAddressException;
 import java.awt.event.ActionEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;

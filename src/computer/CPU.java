@@ -5,6 +5,10 @@
  */
 package computer;
 
+import computer.ComputerExceptions.MemoryAddressException;
+import computer.ComputerExceptions.InterruptException;
+import computer.ComputerExceptions.UnexpectedInstructionException;
+import computer.ComputerExceptions.HaltException;
 import gui.UI;
 import javax.swing.JOptionPane;
 
@@ -37,6 +41,9 @@ public class CPU {
     
     // Continuously working until error or end of program
     public void run() {
+        if (this.isInterrupted())
+            return;
+        
         this.isRunning = true;
         while (this.isRunning && this.interrupt == null)
             this.singleStep();
@@ -91,7 +98,7 @@ public class CPU {
     
     public boolean isInterrupted() {
         if (this.interrupt != null) {
-            this.interrupt.showAlert();
+            JOptionPane.showMessageDialog(this.ui, "Disabled by interrupt.", "CPU Error", JOptionPane.ERROR_MESSAGE);
             this.ui.ioPanel.focusOnInputAndSelectAll();
             return true;
         }

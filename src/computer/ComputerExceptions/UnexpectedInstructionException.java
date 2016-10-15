@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package computer;
+package computer.ComputerExceptions;
 
 import javax.swing.JOptionPane;
 
@@ -11,10 +11,10 @@ import javax.swing.JOptionPane;
  *
  * @author Administrator
  */
-public class HaltException extends Exception {
-    public HaltException() {}
+public class UnexpectedInstructionException extends Exception {
+    public UnexpectedInstructionException() {}
     
     public void showAlert() {
-        JOptionPane.showMessageDialog(null, "Halt.", "Halt Instruction", JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Unexpected instruction encountered.", "Unexpected Instruction", JOptionPane.ERROR_MESSAGE);
     }
 }

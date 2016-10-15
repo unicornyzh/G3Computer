@@ -5,6 +5,7 @@
  */
 package computer;
 
+import computer.ComputerExceptions.MemoryAddressException;
 import gui.UI;
 import java.io.*;
 import java.util.ArrayList;
