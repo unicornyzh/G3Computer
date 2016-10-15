@@ -8,6 +8,7 @@ package computer;
 import java.io.*;
 import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,6 +46,39 @@ public class Memory {
     public void write(int address, int content) {
         this.cache.write(address, content, this);
     }
+
+    /**
+     * Find a sequentially empty memory space for the program to be stored.
+     * @param instructions
+     * @return -1 if it fails else the beginning of the program address.
+     */
+    public int allocate(List<Integer> instructions) {
+        // Start of PC
+        int start = 010;
+        while (start < this.mainMemory.length) {
+            int i;
+            // Leave an empty memory in order to halt or not to mess up with other programs.
+            for (i = 0; i < instructions.size() + 1; ++i) {
+                if (this.mainMemory[start + i] != 0) {
+                    break;
+                }
+            }
+            if (i < instructions.size() + 1) {
+                start = start + i + 1;
+            } else {
+                break;
+            }
+        }
+
+        // Means no such space.
+        if (start >= this.mainMemory.length) {
+            return -1;
+        }
+        for (int i = 0; i < instructions.size(); ++i) {
+            this.mainMemory[start + i] = instructions.get(i);
+        }
+        return start;
+    }
 }
 
 class Cache {
@@ -60,7 +94,7 @@ class Cache {
         this.lines = new ArrayDeque<>();
         
         this.filename = "trace.txt";
-        this.traceToFile("Cache Log\n", false);
+        this.traceToFile("Cache Log", false);
     }
     
     private CacheLine find(int address) {
@@ -111,43 +145,35 @@ class Cache {
     }
     
     private void traceMiss(int address) {
-        String msg = String.format("Cache miss for memory address %d.\n", address);
-        System.out.print(msg);
+        String msg = String.format("Cache miss for memory address %d.", address);
+        System.out.println(msg);
         this.traceToFile(msg, true);
     }
     
     private void traceHit(int address) {
-        String msg = String.format("Cache hit for memory address %d.\n", address);
-        System.out.print(msg);
+        String msg = String.format("Cache hit for memory address %d.", address);
+        System.out.println(msg);
         this.traceToFile(msg, true);
     }
     
     private void traceAdd(int address) {
-        String msg = String.format("Added a new cache line with tag %d. Current number of lines: %d.\n", address, this.lines.size());
-        System.out.print(msg);
+        String msg = String.format("Added a new cache line with tag %d. Current number of lines: %d.", address, this.lines.size());
+        System.out.println(msg);
         this.traceToFile(msg, true);
     }
     
     private void traceRemove(int address) {
-        String msg = String.format("Removed a cache line with tag %d. Current number of lines: %d.\n", address, this.lines.size());
-        System.out.print(msg);
+        String msg = String.format("Removed a cache line with tag %d. Current number of lines: %d.", address, this.lines.size());
+        System.out.println(msg);
         this.traceToFile(msg, true);
     }
     
     private void traceToFile(String msg, boolean toAppend) {
-        Writer writer = null;
-        try {
-            writer = new BufferedWriter(new FileWriter(this.filename, toAppend));
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.filename, toAppend))) {
             writer.append(msg);
+            writer.newLine();
         } catch (IOException ex) {
             Logger.getLogger(Cache.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                if (writer != null)
-                    writer.close();
-            } catch (IOException ex) {
-                Logger.getLogger(Cache.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
     }
 }

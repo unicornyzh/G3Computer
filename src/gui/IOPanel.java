@@ -25,7 +25,6 @@ public class IOPanel extends JPanel {
     
     public JTextArea outputTextArea;
     public JTextField inputTextField;
-    public JButton inputButton;
     
     public IOPanel(Computer computer) {
         super();
@@ -45,26 +44,33 @@ public class IOPanel extends JPanel {
         
         // Input
         this.inputTextField = new JTextField();
-        this.inputButton = new JButton("Input");
-        inputButton.addActionListener((ActionEvent ae) -> {
-            // Validate the timing.
-            if (!computer.cpu.isInterrupted()) {
-                JOptionPane.showMessageDialog(null, "Input denied: No input instruction executed.", "Input Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            
-            // Validate the input.
-            try {
-                Integer.parseInt(this.inputTextField.getText());
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(null, "Incorrect input.", "Input Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            
-            computer.cpu.recover();
+        inputTextField.addActionListener((ActionEvent ae) -> {
+            this.inputAndRecover();
         });
-        inputButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         this.add(inputTextField);
-        this.add(inputButton);
+    }
+    
+    public void focusOnInputAndSelectAll() {
+        this.inputTextField.requestFocus();
+        this.inputTextField.selectAll();
+    }
+    
+    private void inputAndRecover() {
+        // Validate the timing.
+        if (!this.computer.cpu.isInterrupted(true)) {
+            JOptionPane.showMessageDialog(null, "Input denied: No input instruction executed.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Validate the input.
+        try {
+            Integer.parseInt(this.inputTextField.getText());
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Incorrect input.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            this.focusOnInputAndSelectAll();
+            return;
+        }
+
+        this.computer.cpu.recover();
     }
 }

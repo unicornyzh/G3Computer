@@ -25,11 +25,26 @@ public class ControlPanel extends JPanel {
     
     private void initComponents() {
         JButton iplButton = new JButton("IPL");
+        JButton loadHexButton = new JButton("Load Hex");
+        JButton loadOctButton = new JButton("Load Oct");
+        JButton loadBinButton = new JButton("Load Bin");
         JButton runButton = new JButton("RUN");
         JButton ssButton = new JButton("Single Step");
         
         iplButton.addActionListener((ActionEvent ae) -> {
             computer.romLoader.load();
+        });
+        
+        loadHexButton.addActionListener((ActionEvent ae) -> {
+            computer.romLoader.loadFromFile(16);
+        });
+        
+        loadOctButton.addActionListener((ActionEvent ae) -> {
+            computer.romLoader.loadFromFile(8);
+        });
+        
+        loadBinButton.addActionListener((ActionEvent ae) -> {
+            computer.romLoader.loadFromFile(2);
         });
         
         runButton.addActionListener((ActionEvent ae) -> {
@@ -41,6 +56,9 @@ public class ControlPanel extends JPanel {
         });
         
         this.add(iplButton);
+        this.add(loadHexButton);
+        this.add(loadOctButton);
+        this.add(loadBinButton);
         this.add(runButton);
         this.add(ssButton);
     }

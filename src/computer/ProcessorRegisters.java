@@ -46,6 +46,8 @@ public class ProcessorRegisters {
     public void setUI(UI ui) {
         this.ui = ui;
         this.pc.setRegisterGUI(this.ui.registerPanel.pcGUI);
+        // Inital PC
+        this.pc.setContent(010);
         this.cc.setRegisterGUI(this.ui.registerPanel.ccGUI);
         this.ir.setRegisterGUI(this.ui.registerPanel.irGUI);
         this.mar.setRegisterGUI(this.ui.registerPanel.marGUI);

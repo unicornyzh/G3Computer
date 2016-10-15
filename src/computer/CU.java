@@ -250,6 +250,7 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
         if (!this.interrupted) {
             this.interrupted = true;
             JOptionPane.showMessageDialog(this.ui, "Please input your data.");
+            this.ui.ioPanel.focusOnInputAndSelectAll();
             throw new InterruptException(instruction);
         }
         else {
@@ -274,5 +275,10 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
     public Register CHK(ISA instruction) {
         this.registers.irr.setContent(1);
         return this.registers.gpr[instruction.getR()];
+    }
+
+    @Override
+    public Register HLT(ISA instruction) throws Exception {
+        throw new Exception();
     }
 }

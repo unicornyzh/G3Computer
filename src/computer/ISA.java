@@ -29,6 +29,9 @@ public class ISA {
     // Execute
     public Register operate (DataHandlingOperations dho, ArithmeticLogicOperations alo, ControlFlowOperations cfo) throws Exception {
         switch (this.opcode) {
+            case 0:
+                return cfo.HLT(this);
+            
             case 01:
                 return dho.LDR(this);
             case 02:

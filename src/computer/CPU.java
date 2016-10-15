@@ -20,7 +20,7 @@ public class CPU {
     private final ALU alu;
     private final CU cu;
     
-    private InterruptException iex;
+    private InterruptException interrupt;
     
     public ProcessorRegisters registers;
     
@@ -30,58 +30,52 @@ public class CPU {
         this.registers = new ProcessorRegisters();
         this.alu = new ALU(this.registers);
         this.cu = new CU(this.memory, this.registers, this.alu);
-        this.iex = null;
+        this.interrupt = null;
     }
     
     // Continuously working until error or end of program
     public void run() {
-        if (this.iex != null) {
-            JOptionPane.showMessageDialog(this.ui, "Disabled by interrupt.", "Switch Error", JOptionPane.ERROR_MESSAGE);
+        if (this.isInterrupted())
             return;
-        }
         
         try {
             while (true)
                 this.cu.instuctionCycle();
         } catch (InterruptException iex) {
-            this.iex = iex;
-            this.iex.setIsSingleStep(false);
+            this.interrupt = iex;
+            this.interrupt.setIsSingleStep(false);
         } catch (Exception ex) {
             // At this point PC is set to the first address of the boot program, which is currently the only program in memory.
             this.reboot();
-            System.err.println("Unexpected instruction encountered. System rebooted.");
         }
     }
     
     // Execute the instruction cycle (only one at each call)
     public void singleStep() {
-        if (this.iex != null) {
-            JOptionPane.showMessageDialog(this.ui, "Disabled by interrupt.", "Switch Error", JOptionPane.ERROR_MESSAGE);
+        if (this.isInterrupted())
             return;
-        }
         
         try {
             this.cu.instuctionCycle();
         } catch (InterruptException iex) {
-            this.iex = iex;
-            this.iex.setIsSingleStep(true);
+            this.interrupt = iex;
+            this.interrupt.setIsSingleStep(true);
         } catch (Exception ex) {
             // At this point PC is set to the first address of the boot program, which is currently the only program in memory.
             this.reboot();
-            System.err.println("Unexpected instruction encountered. System rebooted.");
         }
     }
     
     public void recover() {
         try {
-            this.cu.recover(this.iex.getInstruction());
+            this.cu.recover(this.interrupt.getInstruction());
         } catch (Exception ex) {
             // Never expect to get here.
             ex.printStackTrace();
         }
-        boolean keepRunning = !this.iex.getIsSingleStep();
+        boolean keepRunning = !this.interrupt.getIsSingleStep();
         // Remember to clear the interrupt (after getting the flag).
-        this.iex = null;
+        this.interrupt = null;
         if (keepRunning)
             this.run();
     }
@@ -93,10 +87,23 @@ public class CPU {
     }
     
     public boolean isInterrupted() {
-        return this.iex != null;
+        if (this.interrupt != null) {
+            JOptionPane.showMessageDialog(this.ui, "Disabled by interrupt.", "CPU Error", JOptionPane.ERROR_MESSAGE);
+            this.ui.ioPanel.focusOnInputAndSelectAll();
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean isInterrupted(boolean checkOnly) {
+        return this.interrupt != null;
     }
     
     private void reboot() {
-        this.registers.pc.setContent(0);
+        // Meaning the boot program starts at octal 10.
+        this.registers.pc.setContent(010);
+        String msg = "Halt instruction or other unexpected instruction encountered. System rebooted.";
+        System.err.println(msg);
+        JOptionPane.showMessageDialog(this.ui, msg, "Reboot", JOptionPane.WARNING_MESSAGE);
     }
 }
