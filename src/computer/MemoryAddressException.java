@@ -11,10 +11,10 @@ import javax.swing.JOptionPane;
  *
  * @author Administrator
  */
-public class UnexpectedInstructionException extends Exception {
-    public UnexpectedInstructionException() {}
+public class MemoryAddressException extends Exception {
+    public MemoryAddressException() {}
     
     public void showAlert() {
-        JOptionPane.showMessageDialog(null, "Unexpected instruction encountered.", "Unexpected Instruction", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Wrong address.", "Memory Error", JOptionPane.ERROR_MESSAGE);
     }
 }

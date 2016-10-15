@@ -21,6 +21,7 @@ public class CPU {
     private final CU cu;
     
     private InterruptException interrupt;
+    private boolean isRunning;
     
     public ProcessorRegisters registers;
     
@@ -31,29 +32,14 @@ public class CPU {
         this.alu = new ALU(this.registers);
         this.cu = new CU(this.memory, this.registers, this.alu);
         this.interrupt = null;
+        this.isRunning = false;
     }
     
     // Continuously working until error or end of program
     public void run() {
-        if (this.isInterrupted())
-            return;
-        
-        try {
-            while (true)
-                this.cu.instuctionCycle();
-        } catch (InterruptException ix) {
-            this.interrupt = ix;
-            this.interrupt.setIsSingleStep(false);
-        } catch (HaltException hx) {
-            hx.showAlert();
-            this.cu.nextInstruction();
-        } catch (UnexpectedInstructionException uix) {
-            uix.showAlert();
-            this.reboot();
-        } catch (Exception ex) {
-            // Never expect to get here.
-            ex.printStackTrace();
-        }
+        this.isRunning = true;
+        while (this.isRunning && this.interrupt == null)
+            this.singleStep();
     }
     
     // Execute the instruction cycle (only one at each call)
@@ -65,16 +51,22 @@ public class CPU {
             this.cu.instuctionCycle();
         } catch (InterruptException iex) {
             this.interrupt = iex;
-            this.interrupt.setIsSingleStep(true);
         } catch (HaltException hx) {
             hx.showAlert();
             this.cu.nextInstruction();
+            this.isRunning = false;
         } catch (UnexpectedInstructionException uix) {
             uix.showAlert();
             this.reboot();
+            this.isRunning = false;
+        } catch (MemoryAddressException maex) {
+            maex.showAlert();
+            this.reboot();
+            this.isRunning = false;
         } catch (Exception ex) {
-            // Never expect to get here.
+            // Program bugs would be caught here.
             ex.printStackTrace();
+            this.isRunning = false;
         }
     }
     
@@ -85,10 +77,9 @@ public class CPU {
             // Never expect to get here.
             ex.printStackTrace();
         }
-        boolean keepRunning = !this.interrupt.getIsSingleStep();
-        // Remember to clear the interrupt (after getting the flag).
+
         this.interrupt = null;
-        if (keepRunning)
+        if (this.isRunning)
             this.run();
     }
     
@@ -100,7 +91,7 @@ public class CPU {
     
     public boolean isInterrupted() {
         if (this.interrupt != null) {
-            JOptionPane.showMessageDialog(this.ui, "Disabled by interrupt.", "CPU Error", JOptionPane.ERROR_MESSAGE);
+            this.interrupt.showAlert();
             this.ui.ioPanel.focusOnInputAndSelectAll();
             return true;
         }
@@ -114,5 +105,7 @@ public class CPU {
     private void reboot() {
         // Meaning the boot program starts at octal 10.
         this.registers.pc.setContent(010);
+        
+        JOptionPane.showMessageDialog(this.ui, "System rebooted.", "Warning", JOptionPane.WARNING_MESSAGE);
     }
 }

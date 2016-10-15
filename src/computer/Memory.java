@@ -18,6 +18,7 @@ import java.util.logging.Logger;
  * @author Administrator
  */
 public class Memory {
+    // Size of main memory
     private final int size;
     private int[] mainMemory;
     private final Cache cache;
@@ -33,21 +34,28 @@ public class Memory {
         return this.size;
     }
     
+    private void check(int index) throws MemoryAddressException {
+        if (index < 0 || index >= this.size)
+            throw new MemoryAddressException();
+    }
+    
     // Direct access
-    public int directRead(int index) {
+    public int directRead(int index) throws MemoryAddressException {
+        this.check(index);
         return mainMemory[index];
     }
     
     // Direct access
-    public void directWrite(int index, int content) {
+    public void directWrite(int index, int content) throws MemoryAddressException {
+        this.check(index);
         this.mainMemory[index] = content;
     }
     
-    public int read(int address) {
+    public int read(int address) throws MemoryAddressException {
         return this.cache.read(address, this);
     }
     
-    public void write(int address, int content) {
+    public void write(int address, int content) throws MemoryAddressException {
         this.cache.write(address, content, this);
     }
 
@@ -108,7 +116,7 @@ class Cache {
         return null;
     }
     
-    private CacheLine addLine(int address, Memory memory) {
+    private CacheLine addLine(int address, Memory memory) throws MemoryAddressException {
         if (this.lines.size() >= this.cacheSize) {
             CacheLine removed = this.lines.remove();
             this.traceRemove(removed.getTag());
@@ -119,14 +127,14 @@ class Cache {
         return newLine;
     }
     
-    private void writeThrough(CacheLine line, int address, int datum, Memory memory) {
+    private void writeThrough(CacheLine line, int address, int datum, Memory memory) throws MemoryAddressException {
         // Update cache
         line.setData(address, datum);
         // Update memory
         memory.directWrite(address, datum);
     }
     
-    public int read(int address, Memory memory) {
+    public int read(int address, Memory memory) throws MemoryAddressException {
         CacheLine line = this.find(address);
         if (line == null) {
             this.traceMiss(address);
@@ -137,7 +145,7 @@ class Cache {
         return line.getData(address);
     }
     
-    public void write(int address, int datum, Memory memory) {
+    public void write(int address, int datum, Memory memory) throws MemoryAddressException {
         CacheLine line = this.find(address);
         if (line == null) {
             this.traceMiss(address);
@@ -188,10 +196,10 @@ class CacheLine {
     private final int tag;
     private int[] data;
     
-    public CacheLine(int size, int address, Memory memory) {
+    public CacheLine(int size, int address, Memory memory) throws MemoryAddressException {
         this.tag = address;
         this.data = new int[size];
-        for (int i = 0; i < this.data.length && address + i < memory.getSize(); ++i)
+        for (int i = 0; i < this.data.length; ++i)
             this.data[i] = memory.directRead(address + i);
     }
     

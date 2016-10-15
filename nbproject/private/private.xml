@@ -5,8 +5,13 @@
         <group>
             <file>file:/G:/LZT/Computer%20System%20Architecture/Project/G3Computer/src/computer/CPU.java</file>
             <file>file:/G:/LZT/Computer%20System%20Architecture/Project/G3Computer/src/computer/Memory.java</file>
+            <file>file:/G:/LZT/Computer%20System%20Architecture/Project/G3Computer/src/computer/MemoryAddressException.java</file>
+            <file>file:/G:/LZT/Computer%20System%20Architecture/Project/G3Computer/src/gui/ControlPanel.java</file>
+            <file>file:/G:/LZT/Computer%20System%20Architecture/Project/G3Computer/src/computer/UnexpectedInstructionException.java</file>
+            <file>file:/G:/LZT/Computer%20System%20Architecture/Project/G3Computer/src/computer/InterruptException.java</file>
             <file>file:/G:/LZT/Computer%20System%20Architecture/Project/G3Computer/src/computer/CU.java</file>
             <file>file:/G:/LZT/Computer%20System%20Architecture/Project/G3Computer/src/computer/ISA.java</file>
+            <file>file:/G:/LZT/Computer%20System%20Architecture/Project/G3Computer/src/computer/RomLoader.java</file>
         </group>
     </open-files>
 </project-private>

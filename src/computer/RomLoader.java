@@ -63,7 +63,7 @@ public class RomLoader {
             JOptionPane.showMessageDialog(this.ui, "Loading succeeded. Your program starts at address " + start);
     }
     
-    public void load() {
+    public void load() throws MemoryAddressException {
         if (this.cpu.isInterrupted())
             return;
         

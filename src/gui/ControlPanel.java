@@ -6,7 +6,10 @@
 package gui;
 
 import computer.Computer;
+import computer.MemoryAddressException;
 import java.awt.event.ActionEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -32,7 +35,11 @@ public class ControlPanel extends JPanel {
         JButton ssButton = new JButton("Single Step");
         
         iplButton.addActionListener((ActionEvent ae) -> {
-            computer.romLoader.load();
+            try {
+                computer.romLoader.load();
+            } catch (MemoryAddressException ex) {
+                ex.showAlert();
+            }
         });
         
         loadHexButton.addActionListener((ActionEvent ae) -> {

@@ -32,7 +32,7 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
         this.ui = ui;
     }
 
-    public void instuctionCycle() throws InterruptException, Exception {
+    public void instuctionCycle() throws InterruptException, HaltException, UnexpectedInstructionException, MemoryAddressException {
         this.fetchInstruction();
         ISA instruction = this.decode();
         this.fetchOperand(instruction);
@@ -42,13 +42,13 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
     }
     
     // Interrupt should not be considered here cuz it's the process after that is done. Nor should other exceptions.
-    public void recover(ISA instruction) throws InterruptException, Exception {
+    public void recover(ISA instruction) throws Exception {
         Register target = this.execute(instruction);
         this.store(target);
         this.nextInstruction();
     }
     
-    public void fetchInstruction() {
+    public void fetchInstruction() throws MemoryAddressException {
         // MAR = PC
         this.registers.mar.setContent(this.registers.pc.getContent());
         // MBR = Memory[MAR]
@@ -61,7 +61,7 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
         return new ISA(this.registers.ir.getContent());
     }
     
-    public void fetchOperand(ISA instruction) {
+    public void fetchOperand(ISA instruction) throws MemoryAddressException {
         // Direct addressing
         if (instruction.getI() == 0) {
             // IAR = Instruction.address
@@ -91,7 +91,7 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
         return instruction.operate(this, this.alu, this);
     }
     
-    public void store(Register target) {
+    public void store(Register target) throws MemoryAddressException {
         // Store into memory
         if (target == null) {
             // MBR = IRR

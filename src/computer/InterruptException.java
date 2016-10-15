@@ -5,13 +5,14 @@
  */
 package computer;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Administrator
  */
 public class InterruptException extends Exception {
     private final ISA instruction;
-    private boolean isSingleStep;
     
     public InterruptException(ISA instruction) {
         super();
@@ -27,11 +28,7 @@ public class InterruptException extends Exception {
         return this.instruction;
     }
     
-    public void setIsSingleStep(boolean b) {
-        this.isSingleStep = b;
-    }
-    
-    public boolean getIsSingleStep() {
-        return this.isSingleStep;
+    public void showAlert() {
+        JOptionPane.showMessageDialog(null, "Disabled by interrupt.", "CPU Error", JOptionPane.ERROR_MESSAGE);
     }
 }
