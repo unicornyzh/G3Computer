@@ -87,7 +87,7 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
         this.registers.mbr.setContent(this.memory.read(this.registers.mar.getContent()));
     }
     
-    public Register execute(ISA instruction) throws InterruptException, Exception {
+    public Register execute(ISA instruction) throws InterruptException, HaltException, UnexpectedInstructionException {
         return instruction.operate(this, this.alu, this);
     }
     
@@ -278,7 +278,11 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
     }
 
     @Override
-    public Register HLT(ISA instruction) throws Exception {
-        throw new Exception();
+    public Register HLT(ISA instruction) throws HaltException, UnexpectedInstructionException {
+        int checkDigits = instruction.getAddress() | (instruction.getI() << 5);
+        if (checkDigits != 0)
+            throw new UnexpectedInstructionException();
+        else
+            throw new HaltException();
     }
 }

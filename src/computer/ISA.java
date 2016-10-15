@@ -27,7 +27,8 @@ public class ISA {
     }
     
     // Execute
-    public Register operate (DataHandlingOperations dho, ArithmeticLogicOperations alo, ControlFlowOperations cfo) throws Exception {
+    public Register operate (DataHandlingOperations dho, ArithmeticLogicOperations alo, ControlFlowOperations cfo) 
+            throws InterruptException, HaltException, UnexpectedInstructionException {
         switch (this.opcode) {
             case 0:
                 return cfo.HLT(this);
@@ -99,7 +100,7 @@ public class ISA {
             // Unexpected instruction occurred.
             default:
                 // Better customize this exception (later work).
-                throw new Exception();
+                throw new UnexpectedInstructionException();
         }
     }
     

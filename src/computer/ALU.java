@@ -139,7 +139,7 @@ public class ALU implements ArithmeticLogicOperations {
     public Register SRC(ISA instruction) {
         boolean left = (instruction.getIX() & 1) == 1;
         boolean logical = (instruction.getIX() >> 1 & 1) == 1;
-        int count = instruction.getAddress();
+        int count = instruction.getAddress() & 0x0000000f;
         int res = this.registers.gpr[instruction.getR()].getContent();
         if (left)
             res <<= count;
@@ -159,7 +159,7 @@ public class ALU implements ArithmeticLogicOperations {
     @Override
     public Register RRC(ISA instruction) {
         boolean left = (instruction.getIX() & 1) == 1;
-        int count = instruction.getAddress();
+        int count = instruction.getAddress() & 0x0000000f;
         int res = this.registers.gpr[instruction.getR()].getContent();
         if (left)
             // Left shift and copy the original left part to the right

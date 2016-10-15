@@ -41,12 +41,18 @@ public class CPU {
         try {
             while (true)
                 this.cu.instuctionCycle();
-        } catch (InterruptException iex) {
-            this.interrupt = iex;
+        } catch (InterruptException ix) {
+            this.interrupt = ix;
             this.interrupt.setIsSingleStep(false);
-        } catch (Exception ex) {
-            // At this point PC is set to the first address of the boot program, which is currently the only program in memory.
+        } catch (HaltException hx) {
+            hx.showAlert();
+            this.cu.nextInstruction();
+        } catch (UnexpectedInstructionException uix) {
+            uix.showAlert();
             this.reboot();
+        } catch (Exception ex) {
+            // Never expect to get here.
+            ex.printStackTrace();
         }
     }
     
@@ -60,9 +66,15 @@ public class CPU {
         } catch (InterruptException iex) {
             this.interrupt = iex;
             this.interrupt.setIsSingleStep(true);
-        } catch (Exception ex) {
-            // At this point PC is set to the first address of the boot program, which is currently the only program in memory.
+        } catch (HaltException hx) {
+            hx.showAlert();
+            this.cu.nextInstruction();
+        } catch (UnexpectedInstructionException uix) {
+            uix.showAlert();
             this.reboot();
+        } catch (Exception ex) {
+            // Never expect to get here.
+            ex.printStackTrace();
         }
     }
     
@@ -102,8 +114,5 @@ public class CPU {
     private void reboot() {
         // Meaning the boot program starts at octal 10.
         this.registers.pc.setContent(010);
-        String msg = "Halt instruction or other unexpected instruction encountered. System rebooted.";
-        System.err.println(msg);
-        JOptionPane.showMessageDialog(this.ui, msg, "Reboot", JOptionPane.WARNING_MESSAGE);
     }
 }

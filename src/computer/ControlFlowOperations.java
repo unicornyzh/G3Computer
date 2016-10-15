@@ -18,5 +18,5 @@ public interface ControlFlowOperations {
     public Register RFS(ISA instruction);
     public Register SOB(ISA instruction);
     public Register JGE(ISA instruction);
-    public Register HLT(ISA instruction) throws Exception;
+    public Register HLT(ISA instruction) throws HaltException, UnexpectedInstructionException;
 }

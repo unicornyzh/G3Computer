@@ -29,6 +29,10 @@ public class Memory {
         this.cache = new Cache(8, 16);
     }
     
+    public int getSize() {
+        return this.size;
+    }
+    
     // Direct access
     public int directRead(int index) {
         return mainMemory[index];
@@ -140,8 +144,10 @@ class Cache {
             // Write no-allocate
             memory.directWrite(address, datum);
         }
-        else
+        else {
+            this.traceHit(address);
             this.writeThrough(line, address, datum, memory);
+        }
     }
     
     private void traceMiss(int address) {
@@ -185,7 +191,7 @@ class CacheLine {
     public CacheLine(int size, int address, Memory memory) {
         this.tag = address;
         this.data = new int[size];
-        for (int i = 0; i < this.data.length; ++i)
+        for (int i = 0; i < this.data.length && address + i < memory.getSize(); ++i)
             this.data[i] = memory.directRead(address + i);
     }
     
