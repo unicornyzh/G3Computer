@@ -18,31 +18,33 @@ import javax.swing.JOptionPane;
  * @author Administrator
  */
 public class RomLoader {
+
     private UI ui;
-    
+
     private final Memory memory;
     private final CPU cpu;
-    
+
     public RomLoader(Memory memory, CPU cpu) {
         this.memory = memory;
         this.cpu = cpu;
     }
-    
+
     public void setUI(UI ui) {
         this.ui = ui;
     }
-    
+
     public void loadFromFile(int radix) {
-        if (this.cpu.isInterrupted())
+        if (this.cpu.isInterrupted()) {
             return;
-        
+        }
+
         // File chooser to read a file
         JFileChooser chooser = new JFileChooser();
         if (chooser.showOpenDialog(this.ui) != JFileChooser.APPROVE_OPTION) {
             System.out.println("Canceled.");
             return;
         }
-        
+
         // Construct a list for instructions
         List<Integer> instructions = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(chooser.getSelectedFile()))) {
@@ -58,16 +60,18 @@ public class RomLoader {
         }
 
         int start = this.memory.allocate(instructions);
-        if (start == -1)
-            JOptionPane.showMessageDialog(this.ui, "Memory full.", "Memory Error", JOptionPane.ERROR_MESSAGE);
-        else
-            JOptionPane.showMessageDialog(this.ui, "Loading succeeded. Your program starts at address " + start);
+        if (start == -1) {
+            JOptionPane.showMessageDialog(this.ui, "Memory full. Loading failed.", "Memory Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this.ui, "Loading succeeded. Your program starts at address " + start + ".");
+        }
     }
-    
-    public void load() throws MemoryAddressException {
-        if (this.cpu.isInterrupted())
+
+    public void loadInitialProgram() throws MemoryAddressException {
+        if (this.cpu.isInterrupted()) {
             return;
-        
+        }
+
         // Data
         this.memory.write(20, 21);
         this.memory.write(24, 120);
@@ -89,10 +93,10 @@ public class RomLoader {
         this.memory.write(201, 33880);
         // IN  2, 0   1100011000000000
         this.memory.write(202, 50688);
-        
+
         // OUT 2, 1   1100101000000001
         this.memory.write(203, 51713);
-        
+
         // STR 2, 1, 0  0000101001000000
         this.memory.write(204, 2624);
         // LDA 2, 1, 0  0000111001000000
@@ -109,7 +113,7 @@ public class RomLoader {
         this.memory.write(210, 6922); // 0001101100001010 
         // RFS 0      0011010000000000
         this.memory.write(211, 13312);
-        
+
 //        // STR 2, 1, 0  0000101001000000
 //        this.memory.write(203, 2624);
 //        // LDA 2, 1, 0  0000111001000000
@@ -126,7 +130,6 @@ public class RomLoader {
 //        this.memory.write(209, 6922); // 0001101100001010 
 //        // RFS 0      0011010000000000
 //        this.memory.write(210, 13312);
-
         // M[25]=300
         // compare:
         // 10 LIX 1, 0   1000110001000000
@@ -205,6 +208,7 @@ public class RomLoader {
         // 17 OUT 0, 1     1100100000000001
         this.memory.write(17, 51201);
 
+        this.cpu.resetRegisters();
         JOptionPane.showMessageDialog(this.ui, "Loading initial program succeeded.");
     }
 }

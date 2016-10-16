@@ -12,8 +12,10 @@ import javax.swing.JOptionPane;
  * @author Administrator
  */
 public class MemoryAddressException extends Exception {
-    public MemoryAddressException() {}
-    
+
+    public MemoryAddressException() {
+    }
+
     public void showAlert() {
         JOptionPane.showMessageDialog(null, "Wrong address.", "Memory Error", JOptionPane.ERROR_MESSAGE);
     }

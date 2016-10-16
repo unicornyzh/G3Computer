@@ -6,25 +6,25 @@
 package computer.ComputerExceptions;
 
 import computer.ISA;
-import javax.swing.JOptionPane;
 
 /**
  *
  * @author Administrator
  */
 public class InterruptException extends Exception {
+
     private final ISA instruction;
-    
+
     public InterruptException(ISA instruction) {
         super();
         this.instruction = instruction;
     }
-    
+
     public InterruptException(ISA instruction, String msg) {
         super(msg);
         this.instruction = instruction;
     }
-    
+
     public ISA getInstruction() {
         return this.instruction;
     }

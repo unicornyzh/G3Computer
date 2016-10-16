@@ -12,8 +12,10 @@ import javax.swing.JOptionPane;
  * @author Administrator
  */
 public class HaltException extends Exception {
-    public HaltException() {}
-    
+
+    public HaltException() {
+    }
+
     public void showAlert() {
         JOptionPane.showMessageDialog(null, "Halt.", "Halt Instruction", JOptionPane.WARNING_MESSAGE);
     }

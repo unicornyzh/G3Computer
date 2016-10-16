@@ -17,13 +17,15 @@ import computer.OperationInterface.DataHandlingOperations;
  * @author Administrator
  */
 public class ISA {
+
     // Components of the intruction
+
     private final int opcode;
     private final int r;
     private final int ix;
     private final int i;
     private final int address;
-    
+
     // Decode
     public ISA(int instruction) {
         this.opcode = (instruction & 0x0000fc00) >> 10;
@@ -32,14 +34,14 @@ public class ISA {
         this.i = (instruction & 0x00000020) >> 5;
         this.address = instruction & 0x0000001f;
     }
-    
+
     // Execute
-    public Register operate (DataHandlingOperations dho, ArithmeticLogicOperations alo, ControlFlowOperations cfo) 
+    public Register operate(DataHandlingOperations dho, ArithmeticLogicOperations alo, ControlFlowOperations cfo)
             throws InterruptException, HaltException, UnexpectedInstructionException {
         switch (this.opcode) {
             case 0:
                 return cfo.HLT(this);
-            
+
             case 01:
                 return dho.LDR(this);
             case 02:
@@ -58,7 +60,7 @@ public class ISA {
                 return dho.OUT(this);
             case 063:
                 return dho.CHK(this);
-                
+
             case 04:
                 return alo.AMR(this);
             case 05:
@@ -87,7 +89,7 @@ public class ISA {
                 return alo.SRC(this);
             case 032:
                 return alo.RRC(this);
-                
+
             case 010:
                 return cfo.JZ(this);
             case 011:
@@ -110,19 +112,19 @@ public class ISA {
                 throw new UnexpectedInstructionException();
         }
     }
-    
+
     public int getR() {
         return this.r;
     }
-    
+
     public int getIX() {
         return this.ix;
     }
-    
+
     public int getI() {
         return this.i;
     }
-    
+
     public int getAddress() {
         return this.address;
     }

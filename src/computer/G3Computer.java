@@ -12,9 +12,10 @@ import gui.UI;
  * @author Administrator
  */
 public class G3Computer {
+
     private final UI ui;
     private final Computer computer;
-    
+
     public G3Computer() {
         this.computer = new Computer();
         this.ui = new UI(this.computer);
@@ -28,5 +29,5 @@ public class G3Computer {
         // TODO code application logic here
         new G3Computer();
     }
-    
+
 }

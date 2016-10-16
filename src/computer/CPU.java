@@ -17,19 +17,21 @@ import javax.swing.JOptionPane;
  * @author Administrator
  */
 public class CPU {
+
     private UI ui;
-    
+
     private final int wordLength;
     private final Memory memory;
     private final ALU alu;
     private final CU cu;
-    
+
     private InterruptException interrupt;
     private boolean isRunning;
-    
+    private final int initalProgramAddress;
+
     public ProcessorRegisters registers;
-    
-    public CPU(int wordLength, Memory memory) {
+
+    public CPU(int wordLength, Memory memory, int initalProgramAddress) {
         this.wordLength = wordLength;
         this.memory = memory;
         this.registers = new ProcessorRegisters();
@@ -37,23 +39,28 @@ public class CPU {
         this.cu = new CU(this.memory, this.registers, this.alu);
         this.interrupt = null;
         this.isRunning = false;
+        this.initalProgramAddress = initalProgramAddress;
+        this.memory.setInitialProgramAddress(this.initalProgramAddress);
     }
-    
+
     // Continuously working until error or end of program
     public void run() {
-        if (this.isInterrupted())
+        if (this.isInterrupted()) {
             return;
-        
+        }
+
         this.isRunning = true;
-        while (this.isRunning && this.interrupt == null)
+        while (this.isRunning && this.interrupt == null) {
             this.singleStep();
+        }
     }
-    
+
     // Execute the instruction cycle (only one at each call)
     public void singleStep() {
-        if (this.isInterrupted())
+        if (this.isInterrupted()) {
             return;
-        
+        }
+
         try {
             this.cu.instuctionCycle();
         } catch (InterruptException iex) {
@@ -76,7 +83,7 @@ public class CPU {
             this.isRunning = false;
         }
     }
-    
+
     public void recover() {
         try {
             this.cu.recover(this.interrupt.getInstruction());
@@ -86,16 +93,17 @@ public class CPU {
         }
 
         this.interrupt = null;
-        if (this.isRunning)
+        if (this.isRunning) {
             this.run();
+        }
     }
-    
+
     public void setUI(UI ui) {
         this.ui = ui;
         this.registers.setUI(this.ui);
         this.cu.setUI(this.ui);
     }
-    
+
     public boolean isInterrupted() {
         if (this.interrupt != null) {
             JOptionPane.showMessageDialog(this.ui, "Disabled by interrupt.", "CPU Error", JOptionPane.ERROR_MESSAGE);
@@ -104,15 +112,19 @@ public class CPU {
         }
         return false;
     }
-    
+
     public boolean isInterrupted(boolean checkOnly) {
         return this.interrupt != null;
     }
-    
+
     private void reboot() {
-        // Meaning the boot program starts at octal 10.
-        this.registers.pc.setContent(010);
+        this.registers.reset(this.initalProgramAddress);
+        // Maybe need to reset others such as cache.
         
         JOptionPane.showMessageDialog(this.ui, "System rebooted.", "Warning", JOptionPane.WARNING_MESSAGE);
+    }
+    
+    public void resetRegisters() {
+        this.registers.reset(this.initalProgramAddress);
     }
 }

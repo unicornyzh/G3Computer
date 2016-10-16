@@ -15,12 +15,13 @@ import java.awt.event.ActionEvent;
  * @author Administrator
  */
 public class RegisterGUI extends JPanel {
+
     private final String name;
     private final int index;
     private final Register register;
     private JRadioButton[] radioButtons;
     private JPanel lightPanel;
-    
+
     public RegisterGUI(Register register, String name) {
         super();
         this.name = name;
@@ -28,7 +29,7 @@ public class RegisterGUI extends JPanel {
         this.index = -1;
         this.initComponents();
     }
-    
+
     public RegisterGUI(Register register, int index) {
         super();
         this.name = null;
@@ -36,7 +37,7 @@ public class RegisterGUI extends JPanel {
         this.index = index;
         this.initComponents();
     }
-    
+
     public RegisterGUI(Register register, String name, int index) {
         super();
         this.name = name;
@@ -44,30 +45,32 @@ public class RegisterGUI extends JPanel {
         this.index = index;
         this.initComponents();
     }
-    
+
     private void initComponents() {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        if (this.name != null)
+        if (this.name != null) {
             this.setupName();
+        }
         // Pack the values and buttons together into a panel
         this.lightPanel = new JPanel();
-        if (this.index != -1)
+        if (this.index != -1) {
             this.setupIndex();
+        }
         this.setupValues();
     }
-    
+
     private void setupName() {
         // Register name
         JLabel label = new JLabel(this.name);
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
         this.add(label);
     }
-    
+
     private void setupIndex() {
         // Register index (for GPR and IX)
         this.lightPanel.add(new JLabel(Integer.toString(this.index)));
     }
-    
+
     private void setupValues() {
         // Register value
         this.radioButtons = new JRadioButton[this.register.getLength()];
@@ -81,27 +84,29 @@ public class RegisterGUI extends JPanel {
         this.lightPanel.add(button);
         button.addActionListener((ActionEvent ae) -> {
             int value = 0;
-            for (int i = 0; i < radioButtons.length; ++i)
-                if (radioButtons[i].isSelected())
+            for (int i = 0; i < radioButtons.length; ++i) {
+                if (radioButtons[i].isSelected()) {
                     value |= 1 << radioButtons.length - i - 1;
+                }
+            }
             // Prohibit response for efficiency (otherwise the setRadioButtons method would be called again, which is unnecessary).
             register.setContent(value, true);
-            
+
             JOptionPane.showMessageDialog(null, "Value set.");
         });
-        
+
         // All set. Add to the parent panel.
         this.add(this.lightPanel);
     }
-    
+
     public void setRadioButtons(int value) {
-        for (int i = this.radioButtons.length - 1; i >=0; --i) {
-            if ((value & 1) == 0)
+        for (int i = this.radioButtons.length - 1; i >= 0; --i) {
+            if ((value & 1) == 0) {
                 this.radioButtons[i].setSelected(false);
-            else
+            } else {
                 this.radioButtons[i].setSelected(true);
+            }
             value >>= 1;
         }
     }
 }
-

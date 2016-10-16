@@ -12,8 +12,10 @@ import javax.swing.JOptionPane;
  * @author Administrator
  */
 public class UnexpectedInstructionException extends Exception {
-    public UnexpectedInstructionException() {}
-    
+
+    public UnexpectedInstructionException() {
+    }
+
     public void showAlert() {
         JOptionPane.showMessageDialog(null, "Unexpected instruction encountered.", "Unexpected Instruction", JOptionPane.ERROR_MESSAGE);
     }

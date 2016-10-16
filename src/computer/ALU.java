@@ -12,8 +12,9 @@ import computer.OperationInterface.ArithmeticLogicOperations;
  * @author Administrator
  */
 public class ALU implements ArithmeticLogicOperations {
+
     private final ProcessorRegisters registers;
-    
+
     public ALU(ProcessorRegisters registers) {
         this.registers = registers;
     }
@@ -61,10 +62,11 @@ public class ALU implements ArithmeticLogicOperations {
         // GPR[rx + 1] = low order bits. So, the result is ACTUALLY stored in GPR[rx + 1].
         this.registers.gpr[rx + 1].setContent(res & 0x0000ffff);
         // cc(0) = 1 if GPR[rx] != 0
-        if (this.registers.gpr[rx].getContent() != 0)
+        if (this.registers.gpr[rx].getContent() != 0) {
             this.registers.irr.setContent(this.registers.cc.getContent() | 1);
-        else
+        } else {
             this.registers.irr.setContent(this.registers.cc.getContent());
+        }
         // CC
         return this.registers.cc;
     }
@@ -77,9 +79,9 @@ public class ALU implements ArithmeticLogicOperations {
         int x = this.registers.gpr[rx].getContent();
         int y = this.registers.gpr[ry].getContent();
         // cc(2) = 1 if GPR[ry] == 0
-        if (y == 0)
+        if (y == 0) {
             this.registers.irr.setContent(this.registers.cc.getContent() | 4);
-        else {
+        } else {
             this.registers.gpr[rx].setContent(x / y);
             this.registers.gpr[rx + 1].setContent(x % y);
             this.registers.irr.setContent(this.registers.cc.getContent());
@@ -95,10 +97,11 @@ public class ALU implements ArithmeticLogicOperations {
         int x = this.registers.gpr[rx].getContent();
         int y = this.registers.gpr[ry].getContent();
         // cc(3) = 1 if GPR[rx] == GPR[ry] else 0
-        if (x == y)
+        if (x == y) {
             this.registers.irr.setContent(this.registers.cc.getContent() | 8);
-        else
+        } else {
             this.registers.irr.setContent(this.registers.cc.getContent() & 0xfffffff7);
+        }
         // CC
         return this.registers.cc;
     }
@@ -143,16 +146,17 @@ public class ALU implements ArithmeticLogicOperations {
         boolean logical = (instruction.getIX() >> 1 & 1) == 1;
         int count = instruction.getAddress() & 0x0000000f;
         int res = this.registers.gpr[instruction.getR()].getContent();
-        if (left)
+        if (left) {
             res <<= count;
-        else {
+        } else {
             // Most Significant Bit
             int msb = res >> 15;
-            if (logical || msb == 0)
+            if (logical || msb == 0) {
                 res >>= count;
-            else
-                // Right shift and replicate the original leftmost sign bit, "1".
+            } else // Right shift and replicate the original leftmost sign bit, "1".
+            {
                 res = (res >> count) + (((1 << 16 - count) - 1) ^ 0x0000ffff);
+            }
         }
         this.registers.irr.setContent(res);
         return this.registers.gpr[instruction.getR()];
@@ -163,12 +167,13 @@ public class ALU implements ArithmeticLogicOperations {
         boolean left = (instruction.getIX() & 1) == 1;
         int count = instruction.getAddress() & 0x0000000f;
         int res = this.registers.gpr[instruction.getR()].getContent();
-        if (left)
-            // Left shift and copy the original left part to the right
+        if (left) // Left shift and copy the original left part to the right
+        {
             res = ((res << count) + ((res >> 16 - count) & ((1 << count) - 1))) & 0x0000ffff;
-        else
-            // right shift and copy the original right part to the left
+        } else // right shift and copy the original right part to the left
+        {
             res = (res >> count) + ((res & ((1 << count) - 1)) << 16 - count);
+        }
         this.registers.irr.setContent(res);
         return this.registers.gpr[instruction.getR()];
     }
