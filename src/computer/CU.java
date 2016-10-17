@@ -268,7 +268,7 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
         } else {
             this.interrupted = false;
             // At this point the input would be absolutely right (cuz it's been examined).
-            this.registers.irr.setContent(Integer.parseInt(this.ui.ioPanel.inputTextField.getText()));
+            this.registers.irr.setContent(this.ui.ioPanel.getInput());
             return this.registers.gpr[instruction.getR()];
         }
     }
