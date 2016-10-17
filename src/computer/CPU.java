@@ -120,6 +120,7 @@ public class CPU {
     private void reboot() {
         this.registers.reset(this.initalProgramAddress);
         // Maybe need to reset others such as cache.
+        // Might need to clear the printer (Or insert an empty line and reset the counter).
         
         JOptionPane.showMessageDialog(this.ui, "System rebooted.", "Warning", JOptionPane.WARNING_MESSAGE);
     }

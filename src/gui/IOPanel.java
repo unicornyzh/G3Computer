@@ -47,7 +47,7 @@ public class IOPanel extends JPanel {
         // Input
         this.inputTextField = new JTextField();
         inputTextField.addActionListener((ActionEvent ae) -> {
-            this.inputAndRecover();
+            this.validateInputAndRecover();
         });
         this.add(inputTextField);
     }
@@ -57,7 +57,7 @@ public class IOPanel extends JPanel {
         this.inputTextField.selectAll();
     }
 
-    private void inputAndRecover() {
+    private void validateInputAndRecover() {
         // Validate the timing.
         if (!this.computer.cpu.isInterrupted(true)) {
             JOptionPane.showMessageDialog(null, "Input denied: No input instruction executed.", "Input Error", JOptionPane.ERROR_MESSAGE);
@@ -66,7 +66,7 @@ public class IOPanel extends JPanel {
 
         // Validate the input.
         try {
-            Integer.parseInt(this.inputTextField.getText());
+            this.getInput();
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(null, "Incorrect input.", "Input Error", JOptionPane.ERROR_MESSAGE);
             this.focusOnInputAndSelectAll();
@@ -76,6 +76,10 @@ public class IOPanel extends JPanel {
         this.computer.cpu.recover();
     }
 
+    public int getInput() {
+        return Integer.parseInt(this.inputTextField.getText());
+    }
+    
     public void setOutput(int content) {
         if (!this.outputTextArea.getText().equals("")) {
             this.outputTextArea.append(System.lineSeparator());
