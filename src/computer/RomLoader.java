@@ -55,8 +55,10 @@ public class RomLoader {
             }
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);
+            return;
         } catch (NumberFormatException nfx) {
             JOptionPane.showMessageDialog(this.ui, "Wrong format.", "File Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
 
         int start = this.memory.allocate(instructions);
@@ -93,10 +95,8 @@ public class RomLoader {
         this.memory.write(201, 33880);
         // IN  2, 0   1100011000000000
         this.memory.write(202, 50688);
-
         // OUT 2, 1   1100101000000001
         this.memory.write(203, 51713);
-
         // STR 2, 1, 0  0000101001000000
         this.memory.write(204, 2624);
         // LDA 2, 1, 0  0000111001000000
@@ -114,22 +114,6 @@ public class RomLoader {
         // RFS 0      0011010000000000
         this.memory.write(211, 13312);
 
-//        // STR 2, 1, 0  0000101001000000
-//        this.memory.write(203, 2624);
-//        // LDA 2, 1, 0  0000111001000000
-//        this.memory.write(204, 3648);
-//        // SIR 2, 1    0001111000000001
-//        this.memory.write(205, 7681);
-//        // STR 2,0,24 0000101000011000
-//        this.memory.write(206, 2584);
-//        // LIX 1, 0    1000110001000000
-//        this.memory.write(207, 35904);
-//        // SOB 3, 3, 1  0011101111000001 
-//        this.memory.write(208, 15297);
-//        // AIR 3, 10             
-//        this.memory.write(209, 6922); // 0001101100001010 
-//        // RFS 0      0011010000000000
-//        this.memory.write(210, 13312);
         // M[25]=300
         // compare:
         // 10 LIX 1, 0   1000110001000000

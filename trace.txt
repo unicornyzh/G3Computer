@@ -646,12 +646,6 @@ Cache hit for memory address 317.
 Cache hit for memory address 102.
 Cache hit for memory address 318.
 Cache hit for memory address 321.
-Cache hit for memory address 319.
-Cache hit for memory address 28.
-Cache hit for memory address 28.
-Cache hit for memory address 320.
-Cache hit for memory address 29.
-Cache hit for memory address 29.
 Cache hit for memory address 321.
 Cache hit for memory address 30.
 Cache hit for memory address 322.
@@ -1463,89 +1457,3 @@ Cache hit for memory address 19.
 Cache hit for memory address 0.
 Cache hit for memory address 20.
 Cache hit for memory address 21.
-Cache hit for memory address 8.
-Cache miss for memory address 26.
-Removed a cache line with tag 103. Current number of lines: 15.
-Added a new cache line with tag 26. Current number of lines: 16.
-Cache miss for memory address 9.
-Removed a cache line with tag 102. Current number of lines: 15.
-Added a new cache line with tag 9. Current number of lines: 16.
-Cache hit for memory address 200.
-Cache hit for memory address 200.
-Cache hit for memory address 20.
-Cache hit for memory address 201.
-Cache hit for memory address 24.
-Cache hit for memory address 202.
-Cache hit for memory address 0.
-Cache hit for memory address 203.
-Cache hit for memory address 1.
-Cache hit for memory address 204.
-Cache miss for memory address 99.
-Removed a cache line with tag 101. Current number of lines: 15.
-Added a new cache line with tag 99. Current number of lines: 16.
-Cache hit for memory address 99.
-Cache hit for memory address 205.
-Cache hit for memory address 99.
-Cache hit for memory address 206.
-Cache hit for memory address 1.
-Cache hit for memory address 207.
-Cache hit for memory address 24.
-Cache hit for memory address 24.
-Cache miss for memory address 208.
-Removed a cache line with tag 100. Current number of lines: 15.
-Added a new cache line with tag 208. Current number of lines: 16.
-Cache hit for memory address 99.
-Cache hit for memory address 209.
-Cache hit for memory address 201.
-Cache hit for memory address 201.
-Cache hit for memory address 24.
-Cache hit for memory address 202.
-Cache hit for memory address 0.
-Cache hit for memory address 203.
-Cache hit for memory address 1.
-Cache hit for memory address 204.
-Cache miss for memory address 98.
-Removed a cache line with tag 10. Current number of lines: 15.
-Added a new cache line with tag 98. Current number of lines: 16.
-Cache hit for memory address 98.
-Cache hit for memory address 205.
-Cache hit for memory address 98.
-Cache hit for memory address 206.
-Cache hit for memory address 1.
-Cache hit for memory address 207.
-Cache hit for memory address 24.
-Cache hit for memory address 24.
-Cache hit for memory address 208.
-Cache hit for memory address 98.
-Cache hit for memory address 209.
-Cache hit for memory address 201.
-Cache hit for memory address 201.
-Cache hit for memory address 24.
-Cache hit for memory address 202.
-Cache hit for memory address 0.
-Cache hit for memory address 203.
-Cache hit for memory address 1.
-Cache hit for memory address 204.
-Cache miss for memory address 97.
-Removed a cache line with tag 200. Current number of lines: 15.
-Added a new cache line with tag 97. Current number of lines: 16.
-Cache hit for memory address 97.
-Cache miss for memory address 205.
-Removed a cache line with tag 300. Current number of lines: 15.
-Added a new cache line with tag 205. Current number of lines: 16.
-Cache hit for memory address 97.
-Cache hit for memory address 206.
-Cache hit for memory address 1.
-Cache hit for memory address 207.
-Cache hit for memory address 24.
-Cache hit for memory address 24.
-Cache hit for memory address 208.
-Cache hit for memory address 97.
-Cache hit for memory address 209.
-Cache miss for memory address 201.
-Removed a cache line with tag 308. Current number of lines: 15.
-Added a new cache line with tag 201. Current number of lines: 16.
-Cache hit for memory address 201.
-Cache hit for memory address 24.
-Cache hit for memory address 202.
-Cache hit for memory address 0.
