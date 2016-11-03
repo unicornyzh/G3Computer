@@ -20,15 +20,15 @@ public class MemorySystem {
 
     // For outer devices' use only.
     private CPU cpu;
-    
+
     // Size of main memory
     private final int size;
     private int[] mainMemory;
     private final Cache cache;
-    
+
     // Decided when initialize CPU
     private int initialProgramAddress;
-    
+
     // Outer devices that are integrated into memory system.
     public RomLoader romLoader;
     public CardReader cardReader;
@@ -37,7 +37,7 @@ public class MemorySystem {
         this.size = size;
         this.mainMemory = new int[size];
         Arrays.fill(this.mainMemory, 0);
-        
+
         this.cache = new Cache(8, 16);
     }
 
@@ -46,13 +46,13 @@ public class MemorySystem {
         this.romLoader = new RomLoader(this, this.cpu);
         this.cardReader = new CardReader(this, this.cpu);
     }
-    
+
     public void setUI(UI ui) {
         this.ui = ui;
         this.romLoader.setUI(this.ui);
         this.cardReader.setUI(this.ui);
     }
-    
+
     public int getSize() {
         return this.size;
     }
@@ -115,7 +115,7 @@ public class MemorySystem {
         }
         return start;
     }
-    
+
     public void setInitialProgramAddress(int address) {
         this.initialProgramAddress = address;
     }

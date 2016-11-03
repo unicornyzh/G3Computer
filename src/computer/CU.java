@@ -13,6 +13,9 @@ import computer.ComputerExceptions.DeviceFailureException;
 import computer.OperationInterface.ControlFlowOperations;
 import computer.OperationInterface.DataHandlingOperations;
 import gui.UI;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
@@ -272,7 +275,21 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
             } else {
                 this.interrupted = false;
                 // At this point the input would be absolutely right (cuz it's been examined).
-                this.registers.irr.setContent(this.ui.ioPanel.getInput());
+                try {
+                    // Read in number format.
+                    if (this.memory.directRead(7) == 0) {
+                        this.registers.irr.setContent(this.ui.ioPanel.getNumberInput());
+                    } // Read in string format.
+                    else {
+                        String str = this.ui.ioPanel.getStringInput();
+                        List<Integer> strAscii = new ArrayList();
+                        for (int i = 0; i < str.length(); ++i) {
+                            strAscii.add((int) str.charAt(i));
+                        }
+                        this.registers.irr.setContent(this.memory.allocate(strAscii));
+                    }
+                } catch (MemoryAddressException ex) {
+                }
             }
         } // Card Reader
         else {
