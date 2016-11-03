@@ -276,7 +276,7 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
             }
         } // Card Reader
         else {
-            this.registers.irr.setContent(this.memory.cardReader.getChar());
+            this.registers.irr.setContent(this.memory.cardReader.getASCII());
         }
 
         return this.registers.gpr[instruction.getR()];
@@ -284,7 +284,18 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
 
     @Override
     public Register OUT(ISA instruction) {
-        this.ui.ioPanel.setNumberOutput(this.registers.gpr[instruction.getR()].getContent());
+        // Temporary solution.
+        int type = 0;
+        try {
+            type = this.memory.directRead(7);
+        } catch (MemoryAddressException ex) {
+        }
+        if (type == 0) {
+            this.ui.ioPanel.setOutput(this.registers.gpr[instruction.getR()].getContent());
+        } else {
+            this.ui.ioPanel.setOutput((char) this.registers.gpr[instruction.getR()].getContent());
+        }
+
         this.registers.irr.setContent(this.registers.gpr[instruction.getR()].getContent());
         return this.registers.gpr[instruction.getR()];
     }

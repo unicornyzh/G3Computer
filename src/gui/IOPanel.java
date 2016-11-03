@@ -79,11 +79,15 @@ public class IOPanel extends JPanel {
     public int getInput() {
         return Integer.parseInt(this.inputTextField.getText());
     }
-    
-    public void setNumberOutput(int content) {
+
+    public void setOutput(int content) {
         if (!this.outputTextArea.getText().equals("")) {
             this.outputTextArea.append(System.lineSeparator());
         }
         this.outputTextArea.append("Line " + ++this.outputCount + ": " + String.valueOf(content));
+    }
+
+    public void setOutput(char content) {
+        this.outputTextArea.append(String.valueOf(content));
     }
 }

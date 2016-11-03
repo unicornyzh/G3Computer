@@ -29,7 +29,7 @@ public class MemorySystem {
     // Decided when initialize CPU
     private int initialProgramAddress;
     
-    // Outer device that is integrated into memory system.
+    // Outer devices that are integrated into memory system.
     public RomLoader romLoader;
     public CardReader cardReader;
 

@@ -70,7 +70,7 @@ public class CardReader {
     }
 
     // Return the ASCII of characters.
-    public int getChar() throws DeviceFailureException {
+    public int getASCII() throws DeviceFailureException {
         if (this.status == 0) {
             throw new DeviceFailureException();
         }
