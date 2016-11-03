@@ -32,25 +32,26 @@ public class ControlPanel extends JPanel {
         JButton loadBinButton = new JButton("Load Bin");
         JButton runButton = new JButton("RUN");
         JButton ssButton = new JButton("Single Step");
+        JButton cardReaderButton = new JButton("Card Reader");
 
         iplButton.addActionListener((ActionEvent ae) -> {
             try {
-                computer.romLoader.loadInitialProgram();
+                computer.memory.romLoader.loadInitialProgram();
             } catch (MemoryAddressException ex) {
                 ex.showAlert();
             }
         });
 
         loadHexButton.addActionListener((ActionEvent ae) -> {
-            computer.romLoader.loadFromFile(16);
+            computer.memory.romLoader.loadFromFile(16);
         });
 
         loadOctButton.addActionListener((ActionEvent ae) -> {
-            computer.romLoader.loadFromFile(8);
+            computer.memory.romLoader.loadFromFile(8);
         });
 
         loadBinButton.addActionListener((ActionEvent ae) -> {
-            computer.romLoader.loadFromFile(2);
+            computer.memory.romLoader.loadFromFile(2);
         });
 
         runButton.addActionListener((ActionEvent ae) -> {
@@ -60,6 +61,10 @@ public class ControlPanel extends JPanel {
         ssButton.addActionListener((ActionEvent ae) -> {
             computer.cpu.singleStep();
         });
+        
+        cardReaderButton.addActionListener((ActionEvent ae) -> {
+            computer.memory.cardReader.load();
+        });
 
         this.add(iplButton);
         this.add(loadHexButton);
@@ -67,5 +72,6 @@ public class ControlPanel extends JPanel {
         this.add(loadBinButton);
         this.add(runButton);
         this.add(ssButton);
+        this.add(cardReaderButton);
     }
 }

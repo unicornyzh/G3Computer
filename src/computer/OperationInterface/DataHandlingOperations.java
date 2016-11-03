@@ -5,8 +5,9 @@
  */
 package computer.OperationInterface;
 
-import computer.ISA;
+import computer.ComputerExceptions.DeviceFailureException;
 import computer.ComputerExceptions.InterruptException;
+import computer.ISA;
 import computer.Register;
 
 /**
@@ -34,7 +35,7 @@ public interface DataHandlingOperations {
      */
     public Register LIX(ISA instruction);
 
-    public Register IN(ISA instruction) throws InterruptException;
+    public Register IN(ISA instruction) throws InterruptException, DeviceFailureException;
 
     public Register OUT(ISA instruction);
 

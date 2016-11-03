@@ -5,6 +5,7 @@
  */
 package computer;
 
+import computer.ComputerExceptions.DeviceFailureException;
 import computer.ComputerExceptions.InterruptException;
 import computer.ComputerExceptions.UnexpectedInstructionException;
 import computer.ComputerExceptions.HaltException;
@@ -37,7 +38,7 @@ public class ISA {
 
     // Execute
     public Register operate(DataHandlingOperations dho, ArithmeticLogicOperations alo, ControlFlowOperations cfo)
-            throws InterruptException, HaltException, UnexpectedInstructionException {
+            throws InterruptException, HaltException, UnexpectedInstructionException, DeviceFailureException {
         switch (this.opcode) {
             case 0:
                 return cfo.HLT(this);

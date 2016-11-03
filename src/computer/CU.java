@@ -9,6 +9,7 @@ import computer.ComputerExceptions.MemoryAddressException;
 import computer.ComputerExceptions.InterruptException;
 import computer.ComputerExceptions.UnexpectedInstructionException;
 import computer.ComputerExceptions.HaltException;
+import computer.ComputerExceptions.DeviceFailureException;
 import computer.OperationInterface.ControlFlowOperations;
 import computer.OperationInterface.DataHandlingOperations;
 import gui.UI;
@@ -22,13 +23,13 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
 
     private UI ui;
 
-    private final Memory memory;
+    private final MemorySystem memory;
     private final ProcessorRegisters registers;
     private final ALU alu;
 
     private boolean interrupted;
 
-    public CU(Memory memory, ProcessorRegisters registers, ALU alu) {
+    public CU(MemorySystem memory, ProcessorRegisters registers, ALU alu) {
         this.memory = memory;
         this.registers = registers;
         this.alu = alu;
@@ -39,7 +40,7 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
         this.ui = ui;
     }
 
-    public void instuctionCycle() throws InterruptException, HaltException, UnexpectedInstructionException, MemoryAddressException {
+    public void instuctionCycle() throws InterruptException, HaltException, UnexpectedInstructionException, MemoryAddressException, DeviceFailureException {
         this.fetchInstruction();
         ISA instruction = this.decode();
         this.fetchOperand(instruction);
@@ -95,7 +96,7 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
         this.registers.mbr.setContent(this.memory.read(this.registers.mar.getContent()));
     }
 
-    public Register execute(ISA instruction) throws InterruptException, HaltException, UnexpectedInstructionException {
+    public Register execute(ISA instruction) throws InterruptException, HaltException, UnexpectedInstructionException, DeviceFailureException {
         return instruction.operate(this, this.alu, this);
     }
 
@@ -259,30 +260,45 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
     }
 
     @Override
-    public Register IN(ISA instruction) throws InterruptException {
-        if (!this.interrupted) {
-            this.interrupted = true;
-            JOptionPane.showMessageDialog(this.ui, "Please input your data.");
-            this.ui.ioPanel.focusOnInputAndSelectAll();
-            throw new InterruptException(instruction);
-        } else {
-            this.interrupted = false;
-            // At this point the input would be absolutely right (cuz it's been examined).
-            this.registers.irr.setContent(this.ui.ioPanel.getInput());
-            return this.registers.gpr[instruction.getR()];
+    public Register IN(ISA instruction) throws InterruptException, DeviceFailureException {
+        int devid = instruction.getAddress();
+        // Console Keyboard
+        if (devid == 0) {
+            if (!this.interrupted) {
+                this.interrupted = true;
+                JOptionPane.showMessageDialog(this.ui, "Please input your data.");
+                this.ui.ioPanel.focusOnInputAndSelectAll();
+                throw new InterruptException(instruction);
+            } else {
+                this.interrupted = false;
+                // At this point the input would be absolutely right (cuz it's been examined).
+                this.registers.irr.setContent(this.ui.ioPanel.getInput());
+            }
+        } // Card Reader
+        else {
+            this.registers.irr.setContent(this.memory.cardReader.getChar());
         }
+
+        return this.registers.gpr[instruction.getR()];
     }
 
     @Override
     public Register OUT(ISA instruction) {
-        this.ui.ioPanel.setOutput(this.registers.gpr[instruction.getR()].getContent());
+        this.ui.ioPanel.setNumberOutput(this.registers.gpr[instruction.getR()].getContent());
         this.registers.irr.setContent(this.registers.gpr[instruction.getR()].getContent());
         return this.registers.gpr[instruction.getR()];
     }
 
     @Override
     public Register CHK(ISA instruction) {
-        this.registers.irr.setContent(1);
+        int devid = instruction.getAddress();
+        // Card Reader
+        if (devid == 2) {
+            this.registers.irr.setContent(this.memory.cardReader.getStatus());
+        } // Others
+        else {
+            this.registers.irr.setContent(1);
+        }
         return this.registers.gpr[instruction.getR()];
     }
 

@@ -80,7 +80,7 @@ public class IOPanel extends JPanel {
         return Integer.parseInt(this.inputTextField.getText());
     }
     
-    public void setOutput(int content) {
+    public void setNumberOutput(int content) {
         if (!this.outputTextArea.getText().equals("")) {
             this.outputTextArea.append(System.lineSeparator());
         }
