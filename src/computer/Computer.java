@@ -16,19 +16,17 @@ public class Computer {
     private UI ui;
 
     public CPU cpu;
-    public Memory memory;
-    public RomLoader romLoader;
+    public MemorySystem memory;
 
     public Computer() {
-        this.memory = new Memory(2048);
-        // Make CPU be able to access memory through MAR
+        this.memory = new MemorySystem(2048);
         this.cpu = new CPU(16, this.memory, 010);
-        this.romLoader = new RomLoader(this.memory, this.cpu);
+        this.memory.setCPU(this.cpu);
     }
 
     public void setUI(UI ui) {
         this.ui = ui;
         this.cpu.setUI(this.ui);
-        this.romLoader.setUI(this.ui);
+        this.memory.setUI(this.ui);
     }
 }

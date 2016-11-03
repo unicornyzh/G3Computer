@@ -5,6 +5,7 @@
  */
 package computer;
 
+import computer.ComputerExceptions.DeviceFailureException;
 import computer.ComputerExceptions.MemoryAddressException;
 import computer.ComputerExceptions.InterruptException;
 import computer.ComputerExceptions.UnexpectedInstructionException;
@@ -21,7 +22,7 @@ public class CPU {
     private UI ui;
 
     private final int wordLength;
-    private final Memory memory;
+    private final MemorySystem memory;
     private final ALU alu;
     private final CU cu;
 
@@ -31,7 +32,7 @@ public class CPU {
 
     public ProcessorRegisters registers;
 
-    public CPU(int wordLength, Memory memory, int initalProgramAddress) {
+    public CPU(int wordLength, MemorySystem memory, int initalProgramAddress) {
         this.wordLength = wordLength;
         this.memory = memory;
         this.registers = new ProcessorRegisters();
@@ -75,6 +76,10 @@ public class CPU {
             this.isRunning = false;
         } catch (MemoryAddressException maex) {
             maex.showAlert();
+            this.reboot();
+            this.isRunning = false;
+        } catch (DeviceFailureException dfx) {
+            dfx.showAlert();
             this.reboot();
             this.isRunning = false;
         } catch (Exception ex) {

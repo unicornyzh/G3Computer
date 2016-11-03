@@ -42,7 +42,7 @@ public class Cache {
         return null;
     }
 
-    private computer.CacheLine addLine(int address, Memory memory) throws MemoryAddressException {
+    private computer.CacheLine addLine(int address, MemorySystem memory) throws MemoryAddressException {
         if (this.lines.size() >= this.cacheSize) {
             computer.CacheLine removed = this.lines.remove();
             this.traceRemove(removed.getTag());
@@ -53,14 +53,14 @@ public class Cache {
         return newLine;
     }
 
-    private void writeThrough(computer.CacheLine line, int address, int datum, Memory memory) throws MemoryAddressException {
+    private void writeThrough(computer.CacheLine line, int address, int datum, MemorySystem memory) throws MemoryAddressException {
         // Update cache
         line.setData(address, datum);
         // Update memory
         memory.directWrite(address, datum);
     }
 
-    public int read(int address, Memory memory) throws MemoryAddressException {
+    public int read(int address, MemorySystem memory) throws MemoryAddressException {
         computer.CacheLine line = this.find(address);
         if (line == null) {
             this.traceMiss(address);
@@ -71,7 +71,7 @@ public class Cache {
         return line.getData(address);
     }
 
-    public void write(int address, int datum, Memory memory) throws MemoryAddressException {
+    public void write(int address, int datum, MemorySystem memory) throws MemoryAddressException {
         computer.CacheLine line = this.find(address);
         if (line == null) {
             this.traceMiss(address);
@@ -122,7 +122,7 @@ class CacheLine {
     private final int tag;
     private int[] data;
 
-    public CacheLine(int size, int address, Memory memory) throws MemoryAddressException {
+    public CacheLine(int size, int address, MemorySystem memory) throws MemoryAddressException {
         super();
         this.tag = address;
         this.data = new int[size];

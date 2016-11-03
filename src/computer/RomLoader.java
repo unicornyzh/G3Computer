@@ -21,10 +21,10 @@ public class RomLoader {
 
     private UI ui;
 
-    private final Memory memory;
+    private final MemorySystem memory;
     private final CPU cpu;
 
-    public RomLoader(Memory memory, CPU cpu) {
+    public RomLoader(MemorySystem memory, CPU cpu) {
         this.memory = memory;
         this.cpu = cpu;
     }
@@ -41,7 +41,7 @@ public class RomLoader {
         // File chooser to read a file
         JFileChooser chooser = new JFileChooser();
         if (chooser.showOpenDialog(this.ui) != JFileChooser.APPROVE_OPTION) {
-            System.out.println("Canceled.");
+            JOptionPane.showMessageDialog(this.ui, "Canceled.", "Loading Files", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -54,7 +54,7 @@ public class RomLoader {
                 instructions.add(Integer.parseInt(line, radix));
             }
         } catch (IOException x) {
-            System.err.format("IOException: %s%n", x);
+            JOptionPane.showMessageDialog(this.ui, "IO Exception occurred.", "IO Error", JOptionPane.ERROR_MESSAGE);
             return;
         } catch (NumberFormatException nfx) {
             JOptionPane.showMessageDialog(this.ui, "Wrong format.", "File Error", JOptionPane.ERROR_MESSAGE);
