@@ -18,18 +18,15 @@ public class MemorySystem {
 
     private UI ui;
 
-    // For outer devices' use only.
+    // For outer devices' use AND allocate method to get initial program address.
     private CPU cpu;
-    
+
     // Size of main memory
     private final int size;
     private int[] mainMemory;
     private final Cache cache;
-    
-    // Decided when initialize CPU
-    private int initialProgramAddress;
-    
-    // Outer device that is integrated into memory system.
+
+    // Outer devices that are integrated into memory system.
     public RomLoader romLoader;
     public CardReader cardReader;
 
@@ -37,7 +34,7 @@ public class MemorySystem {
         this.size = size;
         this.mainMemory = new int[size];
         Arrays.fill(this.mainMemory, 0);
-        
+
         this.cache = new Cache(8, 16);
     }
 
@@ -46,13 +43,13 @@ public class MemorySystem {
         this.romLoader = new RomLoader(this, this.cpu);
         this.cardReader = new CardReader(this, this.cpu);
     }
-    
+
     public void setUI(UI ui) {
         this.ui = ui;
         this.romLoader.setUI(this.ui);
         this.cardReader.setUI(this.ui);
     }
-    
+
     public int getSize() {
         return this.size;
     }
@@ -90,18 +87,21 @@ public class MemorySystem {
      * @return -1 if it fails else the beginning of the program address.
      */
     public int allocate(List<Integer> instructions) {
-        int start = this.initialProgramAddress;
+        int start = this.cpu.getInitialProgramAddress();
         while (start < this.mainMemory.length) {
             int i;
-            // Leave an empty memory in order to halt or not to mess up with other programs.
-            for (i = 0; i < instructions.size() + 1; ++i) {
+            // We want to find a chunk that allows us to achieve:
+            // ... 0 instructions 0 ...
+            // So the condition should be like following (i < instructions.size() + 2).
+            for (i = 0; i < instructions.size() + 2; ++i) {
                 if (this.mainMemory[start + i] != 0) {
                     break;
                 }
             }
-            if (i < instructions.size() + 1) {
-                start = start + i + 1;
+            if (i < instructions.size() + 2) {
+                start += i + 1;
             } else {
+                start += 1;
                 break;
             }
         }
@@ -114,9 +114,5 @@ public class MemorySystem {
             this.mainMemory[start + i] = instructions.get(i);
         }
         return start;
-    }
-    
-    public void setInitialProgramAddress(int address) {
-        this.initialProgramAddress = address;
     }
 }

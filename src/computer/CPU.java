@@ -28,7 +28,8 @@ public class CPU {
 
     private InterruptException interrupt;
     private boolean isRunning;
-    private final int initalProgramAddress;
+    
+    private final int initialProgramAddress;
 
     public ProcessorRegisters registers;
 
@@ -40,8 +41,11 @@ public class CPU {
         this.cu = new CU(this.memory, this.registers, this.alu);
         this.interrupt = null;
         this.isRunning = false;
-        this.initalProgramAddress = initalProgramAddress;
-        this.memory.setInitialProgramAddress(this.initalProgramAddress);
+        this.initialProgramAddress = initalProgramAddress;
+    }
+
+    public int getInitialProgramAddress() {
+        return this.initialProgramAddress;
     }
 
     // Continuously working until error or end of program
@@ -123,14 +127,14 @@ public class CPU {
     }
 
     private void reboot() {
-        this.registers.reset(this.initalProgramAddress);
+        this.registers.reset(this.initialProgramAddress);
         // Maybe need to reset others such as cache.
         // Might need to clear the printer (Or insert an empty line and reset the counter).
-        
+
         JOptionPane.showMessageDialog(this.ui, "System rebooted.", "Warning", JOptionPane.WARNING_MESSAGE);
     }
-    
+
     public void resetRegisters() {
-        this.registers.reset(this.initalProgramAddress);
+        this.registers.reset(this.initialProgramAddress);
     }
 }

@@ -6,6 +6,7 @@
 package gui;
 
 import computer.Computer;
+import computer.ComputerExceptions.MemoryAddressException;
 import java.awt.event.ActionEvent;
 import javax.swing.BoxLayout;
 import javax.swing.JOptionPane;
@@ -64,26 +65,45 @@ public class IOPanel extends JPanel {
             return;
         }
 
-        // Validate the input.
         try {
-            this.getInput();
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(null, "Incorrect input.", "Input Error", JOptionPane.ERROR_MESSAGE);
-            this.focusOnInputAndSelectAll();
-            return;
+            if (this.computer.memory.directRead(7) == 0) {
+                // Validate the input.
+                try {
+                    this.getNumberInput();
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Incorrect input.", "Input Error", JOptionPane.ERROR_MESSAGE);
+                    this.focusOnInputAndSelectAll();
+                    return;
+                }
+            } else {
+                if (this.getStringInput().equals("")) {
+                    JOptionPane.showMessageDialog(null, "Input can't be empty.", "Input Error", JOptionPane.ERROR_MESSAGE);
+                    this.focusOnInputAndSelectAll();
+                    return;
+                }
+            }
+        } catch (MemoryAddressException ex) {
         }
 
         this.computer.cpu.recover();
     }
 
-    public int getInput() {
+    public int getNumberInput() {
         return Integer.parseInt(this.inputTextField.getText());
     }
-    
-    public void setNumberOutput(int content) {
+
+    public String getStringInput() {
+        return this.inputTextField.getText();
+    }
+
+    public void setOutput(int content) {
         if (!this.outputTextArea.getText().equals("")) {
             this.outputTextArea.append(System.lineSeparator());
         }
         this.outputTextArea.append("Line " + ++this.outputCount + ": " + String.valueOf(content));
+    }
+
+    public void setOutput(char content) {
+        this.outputTextArea.append(String.valueOf(content));
     }
 }
