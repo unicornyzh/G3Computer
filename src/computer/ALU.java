@@ -37,16 +37,18 @@ public class ALU implements ArithmeticLogicOperations {
 
     @Override
     public Register AIR(ISA instruction) {
-        // IRR = GPR[r] + Immed, where Immed == Address
-        this.registers.irr.setContent(this.registers.gpr[instruction.getR()].getContent() + instruction.getAddress());
+        // IRR = GPR[r] + Immed, where Immed == (IX, I, Address)
+        int immed = instruction.getIX() << 6 | instruction.getI() << 5 | instruction.getAddress();
+        this.registers.irr.setContent(this.registers.gpr[instruction.getR()].getContent() + immed);
         // GPR[r]
         return this.registers.gpr[instruction.getR()];
     }
 
     @Override
     public Register SIR(ISA instruction) {
-        // IRR = GPR[r] - Immed, where Immed == Address
-        this.registers.irr.setContent(this.registers.gpr[instruction.getR()].getContent() - instruction.getAddress());
+        // IRR = GPR[r] - Immed, where Immed == (IX, I, Address)
+        int immed = instruction.getIX() << 6 | instruction.getI() << 5 | instruction.getAddress();
+        this.registers.irr.setContent(this.registers.gpr[instruction.getR()].getContent() - immed);
         // GPR[r]
         return this.registers.gpr[instruction.getR()];
     }

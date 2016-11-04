@@ -50,8 +50,12 @@ public class RomLoader {
         try (BufferedReader reader = new BufferedReader(new FileReader(chooser.getSelectedFile()))) {
             String line = null;
             while ((line = reader.readLine()) != null) {
-                // Accept data in given radix (currently it could be 2 or 8 or 16).
-                instructions.add(Integer.parseInt(line, radix));
+                line = line.trim();
+                // Skip empty lines and comments.
+                if (!line.equals("") && !line.startsWith("//")) {
+                    // Accept data in given radix (currently it could be 2 or 8 or 16).
+                    instructions.add(Integer.parseInt(line, radix));
+                }
             }
         } catch (IOException x) {
             JOptionPane.showMessageDialog(this.ui, "IO Exception occurred.", "IO Error", JOptionPane.ERROR_MESSAGE);

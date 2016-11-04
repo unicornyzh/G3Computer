@@ -18,16 +18,13 @@ public class MemorySystem {
 
     private UI ui;
 
-    // For outer devices' use only.
+    // For outer devices' use AND allocate method to get initial program address.
     private CPU cpu;
 
     // Size of main memory
     private final int size;
     private int[] mainMemory;
     private final Cache cache;
-
-    // Decided when initialize CPU
-    private int initialProgramAddress;
 
     // Outer devices that are integrated into memory system.
     public RomLoader romLoader;
@@ -90,18 +87,21 @@ public class MemorySystem {
      * @return -1 if it fails else the beginning of the program address.
      */
     public int allocate(List<Integer> instructions) {
-        int start = this.initialProgramAddress;
+        int start = this.cpu.getInitialProgramAddress();
         while (start < this.mainMemory.length) {
             int i;
-            // Leave an empty memory in order to halt or not to mess up with other programs.
-            for (i = 0; i < instructions.size() + 1; ++i) {
+            // We want to find a chunk that allows us to achieve:
+            // ... 0 instructions 0 ...
+            // So the condition should be like following (i < instructions.size() + 2).
+            for (i = 0; i < instructions.size() + 2; ++i) {
                 if (this.mainMemory[start + i] != 0) {
                     break;
                 }
             }
-            if (i < instructions.size() + 1) {
-                start = start + i + 1;
+            if (i < instructions.size() + 2) {
+                start += i + 1;
             } else {
+                start += 1;
                 break;
             }
         }
@@ -114,9 +114,5 @@ public class MemorySystem {
             this.mainMemory[start + i] = instructions.get(i);
         }
         return start;
-    }
-
-    public void setInitialProgramAddress(int address) {
-        this.initialProgramAddress = address;
     }
 }
