@@ -58,6 +58,8 @@ public class CardReader {
         try {
             // Put all contents of the file into a string variable
             this.contents = new String(Files.readAllBytes(Paths.get(chooser.getSelectedFile().getPath())));
+            // Requested by the programmer
+            this.contents = this.contents.trim();
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(this.ui, "IO Exception occurred.", "IO Error", JOptionPane.ERROR_MESSAGE);
             return;

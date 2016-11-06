@@ -20,16 +20,55 @@ import computer.OperationInterface.DataHandlingOperations;
 public class ISA {
 
     // Components of the intruction
-
     private final int opcode;
     private final int r;
     private final int ix;
     private final int i;
     private final int address;
 
+    private final boolean ignoreFetchOperand;
+
     // Decode
     public ISA(int instruction) {
         this.opcode = (instruction & 0x0000fc00) >> 10;
+        switch (this.opcode) {
+            // HLT
+            case 0:
+            // TRAP
+            case 036:
+            // AIR
+            case 06:
+            // SIR
+            case 07:
+            // RFS
+            case 015:
+            // MLT
+            case 020:
+            // DVD
+            case 021:
+            // TRR
+            case 022:
+            // AND
+            case 023:
+            // ORR
+            case 024:
+            // NOT
+            case 025:
+            // SRC
+            case 031:
+            // RRC
+            case 032:
+            // IN
+            case 061:
+            // OUT
+            case 062:
+            // CHK
+            case 063:
+                this.ignoreFetchOperand = true;
+                break;
+            default:
+                this.ignoreFetchOperand = false;
+        }
         this.r = (instruction & 0x00000300) >> 8;
         this.ix = (instruction & 0x000000c0) >> 6;
         this.i = (instruction & 0x00000020) >> 5;
@@ -109,7 +148,6 @@ public class ISA {
                 return cfo.JGE(this);
             // Unexpected instruction occurred.
             default:
-                // Better customize this exception (later work).
                 throw new UnexpectedInstructionException();
         }
     }
@@ -128,5 +166,9 @@ public class ISA {
 
     public int getAddress() {
         return this.address;
+    }
+
+    public boolean canSkipFetchOperand() {
+        return this.ignoreFetchOperand;
     }
 }
