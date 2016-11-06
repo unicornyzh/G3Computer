@@ -20,7 +20,7 @@ public class Computer {
 
     public Computer() {
         this.memory = new MemorySystem(2048);
-        this.cpu = new CPU(16, this.memory, 010);
+        this.cpu = new CPU(16, this.memory, 15);
         this.memory.setCPU(this.cpu);
     }
 

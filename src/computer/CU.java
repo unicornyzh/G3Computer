@@ -73,6 +73,10 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
     }
 
     public void fetchOperand(ISA instruction) throws MemoryAddressException {
+        if (instruction.canSkipFetchOperand()) {
+            return;
+        }
+
         // Direct addressing
         if (instruction.getI() == 0) {
             // IAR = Instruction.address
