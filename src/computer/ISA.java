@@ -9,6 +9,7 @@ import computer.ComputerExceptions.DeviceFailureException;
 import computer.ComputerExceptions.InterruptException;
 import computer.ComputerExceptions.UnexpectedInstructionException;
 import computer.ComputerExceptions.HaltException;
+import computer.ComputerExceptions.MemoryAddressException;
 import computer.OperationInterface.ControlFlowOperations;
 import computer.OperationInterface.ArithmeticLogicOperations;
 import computer.OperationInterface.DataHandlingOperations;
@@ -31,6 +32,7 @@ public class ISA {
     // Decode
     public ISA(int instruction) {
         this.opcode = (instruction & 0x0000fc00) >> 10;
+        
         switch (this.opcode) {
             // HLT
             case 0:
@@ -41,7 +43,7 @@ public class ISA {
             // SIR
             case 07:
             // RFS
-            case 015:
+//            case 015:
             // MLT
             case 020:
             // DVD
@@ -69,6 +71,7 @@ public class ISA {
             default:
                 this.ignoreFetchOperand = false;
         }
+        
         this.r = (instruction & 0x00000300) >> 8;
         this.ix = (instruction & 0x000000c0) >> 6;
         this.i = (instruction & 0x00000020) >> 5;
@@ -77,10 +80,12 @@ public class ISA {
 
     // Execute
     public Register operate(DataHandlingOperations dho, ArithmeticLogicOperations alo, ControlFlowOperations cfo)
-            throws InterruptException, HaltException, UnexpectedInstructionException, DeviceFailureException {
+            throws InterruptException, HaltException, UnexpectedInstructionException, DeviceFailureException, MemoryAddressException {
         switch (this.opcode) {
             case 0:
                 return cfo.HLT(this);
+            case 036:
+                return cfo.TRAP(this);
 
             case 01:
                 return dho.LDR(this);

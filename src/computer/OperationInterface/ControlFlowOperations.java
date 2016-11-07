@@ -6,9 +6,10 @@
 package computer.OperationInterface;
 
 import computer.ComputerExceptions.HaltException;
+import computer.ComputerExceptions.MemoryAddressException;
+import computer.ComputerExceptions.UnexpectedInstructionException;
 import computer.ISA;
 import computer.Register;
-import computer.ComputerExceptions.UnexpectedInstructionException;
 
 /**
  *
@@ -33,4 +34,6 @@ public interface ControlFlowOperations {
     public Register JGE(ISA instruction);
 
     public Register HLT(ISA instruction) throws HaltException, UnexpectedInstructionException;
+
+    public Register TRAP(ISA instruction) throws MemoryAddressException;
 }

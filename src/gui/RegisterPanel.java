@@ -25,6 +25,7 @@ public class RegisterPanel extends JPanel {
     public RegisterGUI[] xGUI;
     public RegisterGUI marGUI;
     public RegisterGUI mbrGUI;
+    public RegisterGUI mfrGUI;
     public RegisterGUI irGUI;
     public RegisterGUI pcGUI;
     public RegisterGUI ccGUI;
@@ -79,5 +80,6 @@ public class RegisterPanel extends JPanel {
         this.rightPanel.add(this.irGUI = new RegisterGUI(this.computer.cpu.registers.ir, "IR"));
         this.rightPanel.add(this.pcGUI = new RegisterGUI(this.computer.cpu.registers.pc, "PC"));
         this.rightPanel.add(this.ccGUI = new RegisterGUI(this.computer.cpu.registers.cc, "CC"));
+        this.rightPanel.add(this.mfrGUI = new RegisterGUI(this.computer.cpu.registers.mfr, "MFR"));
     }
 }
