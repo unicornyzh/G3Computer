@@ -14,7 +14,6 @@ import computer.OperationInterface.ControlFlowOperations;
 import computer.OperationInterface.DataHandlingOperations;
 import gui.UI;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -43,7 +42,8 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
         this.ui = ui;
     }
 
-    public void instuctionCycle() throws InterruptException, HaltException, UnexpectedInstructionException, MemoryAddressException, DeviceFailureException {
+    public void instuctionCycle()
+            throws InterruptException, HaltException, UnexpectedInstructionException, MemoryAddressException, DeviceFailureException {
         this.fetchInstruction();
         ISA instruction = this.decode();
         this.fetchOperand(instruction);
@@ -88,12 +88,12 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
             }
         } // Indirect addressing
         else {
-            if (instruction.getIX() == 0) // IAR = Memory[Instruction.address]
-            {
+            if (instruction.getIX() == 0) {
+                // IAR = Memory[Instruction.address]
                 this.registers.iar.setContent(memory.read(instruction.getAddress()));
             } // Indexing
-            else // IAR = Memory[Instruction.address + X[ix]]
-            {
+            else {
+                // IAR = Memory[Instruction.address + X[ix]]
                 this.registers.iar.setContent(memory.read(this.registers.x[instruction.getIX()].getContent() + instruction.getAddress()));
             }
         }
@@ -103,7 +103,8 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
         this.registers.mbr.setContent(this.memory.read(this.registers.mar.getContent()));
     }
 
-    public Register execute(ISA instruction) throws InterruptException, HaltException, UnexpectedInstructionException, DeviceFailureException {
+    public Register execute(ISA instruction)
+            throws InterruptException, HaltException, UnexpectedInstructionException, DeviceFailureException, MemoryAddressException {
         return instruction.operate(this, this.alu, this);
     }
 
@@ -342,5 +343,15 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
         } else {
             throw new HaltException();
         }
+    }
+
+    @Override
+    public Register TRAP(ISA instruction) throws MemoryAddressException {
+        int trapCode = instruction.getAddress() & 0x0000000f;
+        // Stores the PC + 1 in memory location 2.
+        this.memory.write(2, this.registers.pc.getContent() + 1);
+        // Goes to the routine whose address is in Memory[0] + trap code.
+        this.registers.irr.setContent(this.memory.read(0) + trapCode - 1);
+        return this.registers.pc;
     }
 }

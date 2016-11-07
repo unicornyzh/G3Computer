@@ -23,6 +23,7 @@ public class ProcessorRegisters {
     public Register irr;
     public Register mar;
     public Register mbr;
+    public Register mfr;
     // X[1], X[2], X[3]
     public Register[] x;
     // R[0], R[1], R[2], R[3]
@@ -36,6 +37,7 @@ public class ProcessorRegisters {
         this.irr = new Register(16);
         this.mar = new Register(16);
         this.mbr = new Register(16);
+        this.mfr = new Register(4);
         this.gpr = new Register[4];
         for (int i = 0; i < this.gpr.length; ++i) {
             gpr[i] = new Register(16);
@@ -54,6 +56,7 @@ public class ProcessorRegisters {
         this.irr.setContent(0);
         this.mar.setContent(0);
         this.mbr.setContent(0);
+        this.mfr.setContent(0);
         for (int i = 0; i < this.gpr.length; ++i) {
             gpr[i].setContent(0);
         }
@@ -69,6 +72,7 @@ public class ProcessorRegisters {
         this.ir.setRegisterGUI(this.ui.registerPanel.irGUI);
         this.mar.setRegisterGUI(this.ui.registerPanel.marGUI);
         this.mbr.setRegisterGUI(this.ui.registerPanel.mbrGUI);
+        this.mfr.setRegisterGUI(this.ui.registerPanel.mfrGUI);
         for (int i = 0; i < this.gpr.length; ++i) {
             this.gpr[i].setRegisterGUI(this.ui.registerPanel.gprGUI[i]);
         }
