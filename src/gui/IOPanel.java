@@ -25,14 +25,15 @@ public class IOPanel extends JPanel {
 
     public JTextArea outputTextArea;
     public JTextField inputTextField;
-
-    private int outputCount;
+    
+    private boolean isNewLine;
 
     public IOPanel(Computer computer) {
         super();
         this.computer = computer;
         this.initComponents();
-        this.outputCount = 0;
+        
+        this.isNewLine = false;
     }
 
     private void initComponents() {
@@ -41,13 +42,16 @@ public class IOPanel extends JPanel {
 
         // Output
         this.outputTextArea = new JTextArea();
-        outputTextArea.setEditable(false);
-        outputTextArea.setRows(5);
-        this.add(new JScrollPane(outputTextArea));
+        this.outputTextArea.setEditable(false);
+        this.outputTextArea.setRows(10);
+        JScrollPane scrollPane = new JScrollPane(this.outputTextArea);
+        TextLineNumber tln = new TextLineNumber(this.outputTextArea);
+        scrollPane.setRowHeaderView(tln);
+        this.add(scrollPane);
 
         // Input
         this.inputTextField = new JTextField();
-        inputTextField.addActionListener((ActionEvent ae) -> {
+        this.inputTextField.addActionListener((ActionEvent ae) -> {
             this.validateInputAndRecover();
         });
         this.add(inputTextField);
@@ -97,13 +101,19 @@ public class IOPanel extends JPanel {
     }
 
     public void setOutput(int content) {
-        if (!this.outputTextArea.getText().equals("")) {
+        if (this.isNewLine) {
             this.outputTextArea.append(System.lineSeparator());
+            this.isNewLine = false;
         }
-        this.outputTextArea.append("Line " + ++this.outputCount + ": " + String.valueOf(content));
+        this.outputTextArea.append(String.valueOf(content));
+        this.isNewLine = true;
     }
 
     public void setOutput(char content) {
+        if (this.isNewLine) {
+            this.outputTextArea.append(System.lineSeparator());
+            this.isNewLine = false;
+        }
         this.outputTextArea.append(String.valueOf(content));
     }
 }
