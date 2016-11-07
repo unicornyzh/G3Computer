@@ -56,10 +56,16 @@ public class ISA {
             case 024:
             // NOT
             case 025:
+            // CMT
+            case 026:
+            // CMB
+            case 027:
             // SRC
             case 031:
             // RRC
             case 032:
+            // LIX
+            case 043:
             // IN
             case 061:
             // OUT

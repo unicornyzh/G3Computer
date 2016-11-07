@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.text.DefaultCaret;
 
 /**
  *
@@ -25,14 +26,14 @@ public class IOPanel extends JPanel {
 
     public JTextArea outputTextArea;
     public JTextField inputTextField;
-    
+
     private boolean isNewLine;
 
     public IOPanel(Computer computer) {
         super();
         this.computer = computer;
         this.initComponents();
-        
+
         this.isNewLine = false;
     }
 
@@ -47,6 +48,9 @@ public class IOPanel extends JPanel {
         JScrollPane scrollPane = new JScrollPane(this.outputTextArea);
         TextLineNumber tln = new TextLineNumber(this.outputTextArea);
         scrollPane.setRowHeaderView(tln);
+        // Set auto scroll down.
+        DefaultCaret caret = (DefaultCaret) this.outputTextArea.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         this.add(scrollPane);
 
         // Input

@@ -54,10 +54,16 @@ public class CPU {
             return;
         }
 
-        this.isRunning = true;
-        while (this.isRunning && this.interrupt == null) {
-            this.singleStep();
+//        this.isRunning = true;
+//        while (this.isRunning && this.interrupt == null) {
+//            this.singleStep();
+//        }
+        new Thread(() -> {
+            this.isRunning = true;
+            while (this.isRunning && this.interrupt == null) {
+                this.singleStep();
         }
+        }).start();
     }
 
     // Execute the instruction cycle (only one at each call)

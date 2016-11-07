@@ -82,8 +82,8 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
             // IAR = Instruction.address
             this.registers.iar.setContent(instruction.getAddress());
             // Indexing
-            if (instruction.getIX() != 0) // IAR += X[ix]
-            {
+            if (instruction.getIX() != 0) {
+                // IAR += X[ix]
                 this.registers.iar.setContent(this.registers.iar.getContent() + this.registers.x[instruction.getIX()].getContent());
             }
         } // Indirect addressing
@@ -115,8 +115,8 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
             this.registers.mbr.setContent(this.registers.irr.getContent());
             // Memory[MAR] = MBR
             this.memory.write(this.registers.mar.getContent(), this.registers.mbr.getContent());
-        } else // Target register = IRR
-        {
+        } else {
+            // Target register = IRR
             target.setContent(this.registers.irr.getContent());
         }
     }
