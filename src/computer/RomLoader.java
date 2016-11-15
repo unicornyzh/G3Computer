@@ -45,31 +45,34 @@ public class RomLoader {
             return;
         }
 
+        int count = 0;
         // Construct a list for instructions
         List<Integer> instructions = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(chooser.getSelectedFile()))) {
             String line = null;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
-                // Skip empty lines and comments.
-                if (!line.equals("") && !line.startsWith("//")) {
+                // Skip non-parsable lines
+                try {
                     // Accept data in given radix (currently it could be 2 or 8 or 16).
                     instructions.add(Integer.parseInt(line, radix));
+                    ++count;
+                } catch (NumberFormatException nfx) {
                 }
             }
         } catch (IOException x) {
             JOptionPane.showMessageDialog(this.ui, "IO Exception occurred.", "IO Error", JOptionPane.ERROR_MESSAGE);
             return;
-        } catch (NumberFormatException nfx) {
-            JOptionPane.showMessageDialog(this.ui, "Wrong format.", "File Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        if (instructions.isEmpty()) {
+            JOptionPane.showMessageDialog(this.ui, "Loading failed. Please check the content and format of your file.", "Loading Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         int start = this.memory.allocate(instructions);
-        if (start == -1) {
-            JOptionPane.showMessageDialog(this.ui, "Memory full. Loading failed.", "Memory Error", JOptionPane.ERROR_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(this.ui, "Loading succeeded. Your program starts at address " + start + ".");
+        if (start != -1) {
+            JOptionPane.showMessageDialog(this.ui, "Loaded " + count + (count == 1 ? " instruction. " : " instructions. ") + "Your program starts at address " + start + ".");
         }
     }
 
@@ -78,19 +81,22 @@ public class RomLoader {
             return;
         }
 
-        // Data
-        this.memory.write(5, 0);
-        this.memory.write(6, 1300);
-        this.memory.write(7, 0);
-        this.memory.write(8, 0);
-        this.memory.write(9, 600);
+//        // Data
+//        this.memory.write(5, 0);
+//        this.memory.write(6, 1300);
+//        this.memory.write(7, 0);
+//        this.memory.write(8, 0);
+//        this.memory.write(9, 600);
+//        this.memory.write(10, 13312);
+//        this.memory.write(12, 32);
+//        this.memory.write(13, 44);
+//        this.memory.write(14, 46);
+//        this.memory.write(15, 63);
+//        this.memory.write(1303, 1);
+//        this.memory.write(1304, 1);
+        
+        this.memory.write(8, 1024);
         this.memory.write(10, 13312);
-        this.memory.write(12, 32);
-        this.memory.write(13, 44);
-        this.memory.write(14, 46);
-        this.memory.write(15, 63);
-        this.memory.write(1303, 1);
-        this.memory.write(1304, 1);
 
         this.cpu.resetRegisters();
         JOptionPane.showMessageDialog(this.ui, "Loading initial program succeeded.");

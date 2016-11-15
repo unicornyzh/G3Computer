@@ -43,7 +43,7 @@ public class ISA {
             // SIR
             case 07:
             // RFS
-//            case 015:
+            case 015:
             // MLT
             case 020:
             // DVD
@@ -64,6 +64,12 @@ public class ISA {
             case 031:
             // RRC
             case 032:
+            // LE
+            case 033:
+            // GE
+            case 034:
+            // ET
+            case 035:
             // LIX
             case 043:
             // IN
@@ -72,6 +78,10 @@ public class ISA {
             case 062:
             // CHK
             case 063:
+            // GETS
+            case 064:
+            // PUTS
+            case 065:
                 this.ignoreFetchOperand = true;
                 break;
             default:
@@ -111,6 +121,10 @@ public class ISA {
                 return dho.OUT(this);
             case 063:
                 return dho.CHK(this);
+            case 064:
+                return dho.GETS(this);
+            case 065:
+                return dho.PUTS(this);
 
             case 04:
                 return alo.AMR(this);
@@ -140,6 +154,12 @@ public class ISA {
                 return alo.SRC(this);
             case 032:
                 return alo.RRC(this);
+            case 033:
+                return alo.LE(this);
+            case 034:
+                return alo.GE(this);
+            case 035:
+                return alo.ET(this);
 
             case 010:
                 return cfo.JZ(this);

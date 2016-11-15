@@ -118,6 +118,19 @@ public class IOPanel extends JPanel {
             this.outputTextArea.append(System.lineSeparator());
             this.isNewLine = false;
         }
-        this.outputTextArea.append(String.valueOf(content));
+        if (content == '\n') {
+            this.isNewLine = true;
+        } else {
+            this.outputTextArea.append(String.valueOf(content));
+        }
+    }
+
+    public void setOutput(String content) {
+        if (this.isNewLine) {
+            this.outputTextArea.append(System.lineSeparator());
+            this.isNewLine = false;
+        }
+        this.outputTextArea.append(content);
+        this.isNewLine = true;
     }
 }

@@ -199,4 +199,37 @@ public class ALU implements ArithmeticLogicOperations {
         this.registers.irr.setContent(Math.min(x, y));
         return this.registers.gpr[rx];
     }
+
+    @Override
+    public Register LE(ISA instruction) {
+        int rx = instruction.getR();
+        int ry = instruction.getIX();
+        int rz = instruction.getAddress() & 0x3;
+        int x = this.registers.gpr[rx].getContent();
+        int y = this.registers.gpr[ry].getContent();
+        this.registers.irr.setContent(x <= y ? 1 : 0);
+        return this.registers.gpr[rz];
+    }
+
+    @Override
+    public Register GE(ISA instruction) {
+        int rx = instruction.getR();
+        int ry = instruction.getIX();
+        int rz = instruction.getAddress() & 0x3;
+        int x = this.registers.gpr[rx].getContent();
+        int y = this.registers.gpr[ry].getContent();
+        this.registers.irr.setContent(x >= y ? 1 : 0);
+        return this.registers.gpr[rz];
+    }
+
+    @Override
+    public Register ET(ISA instruction) {
+        int rx = instruction.getR();
+        int ry = instruction.getIX();
+        int rz = instruction.getAddress() & 0x3;
+        int x = this.registers.gpr[rx].getContent();
+        int y = this.registers.gpr[ry].getContent();
+        this.registers.irr.setContent(x == y ? 1 : 0);
+        return this.registers.gpr[rz];
+    }
 }

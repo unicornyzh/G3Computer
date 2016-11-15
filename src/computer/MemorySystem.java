@@ -9,6 +9,7 @@ import computer.ComputerExceptions.MemoryAddressException;
 import gui.UI;
 import java.util.Arrays;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -74,10 +75,12 @@ public class MemorySystem {
 
     public int read(int address) throws MemoryAddressException {
         return this.cache.read(address, this);
+//        return this.directRead(address);
     }
 
     public void write(int address, int content) throws MemoryAddressException {
         this.cache.write(address, content, this);
+//        this.directWrite(address, content);
     }
 
     /**
@@ -94,7 +97,7 @@ public class MemorySystem {
             // ... 0 instructions 0 ...
             // So the condition should be like following (i < instructions.size() + 2).
             for (i = 0; i < instructions.size() + 2; ++i) {
-                if (this.mainMemory[start + i] != 0) {
+                if (start + i >= this.mainMemory.length || this.mainMemory[start + i] != 0) {
                     break;
                 }
             }
@@ -108,6 +111,7 @@ public class MemorySystem {
 
         // Means no such space.
         if (start >= this.mainMemory.length) {
+            JOptionPane.showMessageDialog(this.ui, "Memory full. Allocation failed.", "Memory Error", JOptionPane.ERROR_MESSAGE);
             return -1;
         }
         for (int i = 0; i < instructions.size(); ++i) {

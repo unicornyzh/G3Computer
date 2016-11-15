@@ -354,4 +354,27 @@ public class CU implements DataHandlingOperations, ControlFlowOperations {
         this.registers.irr.setContent(this.memory.read(0) + trapCode - 1);
         return this.registers.pc;
     }
+
+    @Override
+    public Register GETS(ISA instruction) throws DeviceFailureException {
+        int ascii;
+        List<Integer> strAscii = new ArrayList();
+        while ((ascii = this.memory.cardReader.getASCII()) != 0) {
+            strAscii.add(ascii);
+        }
+        this.registers.irr.setContent(this.memory.allocate(strAscii));
+        return this.registers.gpr[instruction.getR()];
+    }
+
+    @Override
+    public Register PUTS(ISA instruction) throws MemoryAddressException {
+        int ascii;
+        StringBuilder sb = new StringBuilder();
+        for (int i = this.registers.gpr[instruction.getR()].getContent(); (ascii = this.memory.directRead(i)) != 0; ++i) {
+            sb.append((char) ascii);
+        }
+        this.ui.ioPanel.setOutput(sb.toString());
+        this.registers.irr.setContent(this.registers.gpr[instruction.getR()].getContent());
+        return this.registers.gpr[instruction.getR()];
+    }
 }

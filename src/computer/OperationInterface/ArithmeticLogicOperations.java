@@ -55,4 +55,32 @@ public interface ArithmeticLogicOperations {
      * @return GPR[rx]
      */
     public Register CMB(ISA instruction);
+
+    /**
+     * Customized Operation. Opcode 033. LE rx, ry, rz: c(rz) = 1 if c(rx) is
+     * less than or equal to c(ry) else 0. rz is the last two digits in address.
+     *
+     * @param instruction
+     * @return GPR[rz]
+     */
+    public Register LE(ISA instruction);
+
+    /**
+     * Customized Operation. Opcode 034. GE rx, ry, rz: c(rz) = 1 if c(rx) is
+     * greater than or equal to c(ry) else 0. rz is the last two digits in
+     * address.
+     *
+     * @param instruction
+     * @return GPR[rz]
+     */
+    public Register GE(ISA instruction);
+
+    /**
+     * Customized Operation. Opcode 035. ET rx, ry, rz: c(rz) = 1 if c(rx) is
+     * equal to c(ry) else 0. rz is the last two digits in address.
+     *
+     * @param instruction
+     * @return GPR[rz]
+     */
+    public Register ET(ISA instruction);
 }

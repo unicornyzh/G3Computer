@@ -54,10 +54,6 @@ public class CPU {
             return;
         }
 
-//        this.isRunning = true;
-//        while (this.isRunning && this.interrupt == null) {
-//            this.singleStep();
-//        }
         new Thread(() -> {
             this.isRunning = true;
             while (this.isRunning && this.interrupt == null) {

@@ -22,7 +22,7 @@ public class Cache {
 
     private final int lineSize;
     private final int cacheSize;
-    private final Queue<computer.CacheLine> lines;
+    private final Queue<CacheLine> lines;
     private final String filename;
 
     public Cache(int lineSize, int cacheSize) {
@@ -33,27 +33,29 @@ public class Cache {
         this.traceToFile("Cache Log", false);
     }
 
-    private computer.CacheLine find(int address) {
-        for (computer.CacheLine line : this.lines) {
-            if (line.matches(address)) {
+    private CacheLine find(int address) {
+        // Cache line can't overlap.
+        int tag = address / this.lineSize * this.lineSize;
+        for (CacheLine line : this.lines) {
+            if (tag == line.getTag()) {
                 return line;
             }
         }
         return null;
     }
 
-    private computer.CacheLine addLine(int address, MemorySystem memory) throws MemoryAddressException {
+    private CacheLine addLine(int address, MemorySystem memory) throws MemoryAddressException {
         if (this.lines.size() >= this.cacheSize) {
-            computer.CacheLine removed = this.lines.remove();
-            this.traceRemove(removed.getTag());
+            CacheLine removed = this.lines.remove();
+            this.traceRemove(removed);
         }
-        computer.CacheLine newLine = new computer.CacheLine(this.lineSize, address, memory);
+        CacheLine newLine = new CacheLine(this.lineSize, address, memory);
         this.lines.add(newLine);
-        this.traceAdd(address);
+        this.traceAdd(newLine);
         return newLine;
     }
 
-    private void writeThrough(computer.CacheLine line, int address, int datum, MemorySystem memory) throws MemoryAddressException {
+    private void writeThrough(CacheLine line, int address, int datum, MemorySystem memory) throws MemoryAddressException {
         // Update cache
         line.setData(address, datum);
         // Update memory
@@ -61,7 +63,7 @@ public class Cache {
     }
 
     public int read(int address, MemorySystem memory) throws MemoryAddressException {
-        computer.CacheLine line = this.find(address);
+        CacheLine line = this.find(address);
         if (line == null) {
             this.traceMiss(address);
             line = this.addLine(address, memory);
@@ -72,7 +74,7 @@ public class Cache {
     }
 
     public void write(int address, int datum, MemorySystem memory) throws MemoryAddressException {
-        computer.CacheLine line = this.find(address);
+        CacheLine line = this.find(address);
         if (line == null) {
             this.traceMiss(address);
             // Write no-allocate
@@ -95,14 +97,14 @@ public class Cache {
         this.traceToFile(msg, true);
     }
 
-    private void traceAdd(int address) {
-        String msg = String.format("Added a new cache line with tag %d. Current number of lines: %d.", address, this.lines.size());
+    private void traceAdd(CacheLine line) {
+        String msg = String.format("Added a new cache line with tag %d. Current number of lines: %d.", line.getTag(), this.lines.size());
         System.out.println(msg);
         this.traceToFile(msg, true);
     }
 
-    private void traceRemove(int address) {
-        String msg = String.format("Removed a cache line with tag %d. Current number of lines: %d.", address, this.lines.size());
+    private void traceRemove(CacheLine line) {
+        String msg = String.format("Removed a cache line with tag %d. Current number of lines: %d.", line.getTag(), this.lines.size());
         System.out.println(msg);
         this.traceToFile(msg, true);
     }
@@ -124,17 +126,12 @@ class CacheLine {
 
     public CacheLine(int size, int address, MemorySystem memory) throws MemoryAddressException {
         super();
-        this.tag = address;
+        // Cache line can't overlap.
+        this.tag = address / size * size;
         this.data = new int[size];
         for (int i = 0; i < this.data.length; ++i) {
-            this.data[i] = memory.directRead(address + i);
+            this.data[i] = memory.directRead(tag + i);
         }
-    }
-
-    public boolean matches(int address) {
-        int pos = address - tag;
-        // Return the position where the datum should be in the line if a match is found, else -1.
-        return pos >= 0 && pos < this.data.length;
     }
 
     public int getTag() {
